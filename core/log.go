@@ -1,10 +1,11 @@
 package core
 
 import (
+	"backend/global"
 	"bytes"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"gvb_server/global"
+
 	"os"
 	"path"
 )

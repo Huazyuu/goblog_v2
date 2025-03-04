@@ -1,9 +1,9 @@
 package core
 
 import (
+	"backend/global"
 	"github.com/olivere/elastic/v7"
 	"github.com/sirupsen/logrus"
-	"gvb_server/global"
 )
 
 func initES() *elastic.Client {

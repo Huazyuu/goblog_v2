@@ -1,6 +1,6 @@
 package core
 
-import "gvb_server/global"
+import "backend/global"
 
 func InitCore() {
 	global.Config = initConf()
@@ -8,6 +8,7 @@ func InitCore() {
 	global.AddrDB = initAddrDB()
 	global.DB = initGorm()
 	global.Redis = initRedis()
-	global.ESClient = initES()
+	// todo es
+	// global.ESClient = initES()
 	defer global.AddrDB.Close()
 }

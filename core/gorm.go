@@ -1,11 +1,12 @@
 package core
 
 import (
+	"backend/global"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"gvb_server/global"
+
 	"time"
 )
 

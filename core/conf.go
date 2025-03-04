@@ -1,9 +1,10 @@
 package core
 
 import (
+	"backend/config"
 	"fmt"
 	"gopkg.in/yaml.v3"
-	"gvb_server/config"
+
 	"log"
 	"os"
 )
