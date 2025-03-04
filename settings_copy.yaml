@@ -1,0 +1,98 @@
+site_info:
+  created_at:  # 网站创建时间
+  bei_an:  # 网站备案号
+  title:  # 网站标题
+  qq_image:  # 与QQ相关的图片路径或链接
+  version:  # 网站版本号
+  email:  # 网站联系邮箱
+  wechat_image:  # 与微信相关的图片路径或链接
+  name:  # 网站名称
+  job:  # 可能表示与网站相关的业务或工作类型
+  addr:  # 网站联系地址
+  slogan:  # 网站标语（中文）
+  slogan_en:  # 网站标语（英文）
+  web:  # 网站的主网址
+  bilibili_url:  # 网站在哔哩哔哩平台的相关链接
+  gitee_url:  # 网站在码云（Gitee）平台的相关链接
+  github_url:  # 网站在GitHub平台的相关链接
+
+system:
+  host: 0.0.0.0  # 系统监听的主机地址，0.0.0.0表示监听所有可用的网络接口
+  port: 8080  # 系统监听的端口号
+  env: debug  # 系统运行环境，这里是调试模式 debug release test
+
+mysql:
+  host: 127.0.0.1  # MySQL数据库的主机地址
+  port: 3306  # MySQL数据库的端口号
+  config: charset=utf8mb4&parseTime=True&loc=Local  # MySQL连接配置参数，设置字符集、是否解析时间、时区等
+  db: yu_blog  # 要连接的数据库名称
+  user: root  # 连接数据库的用户名
+  password: 123456  # 连接数据库的密码
+  log_level: dev  # MySQL操作日志的级别，这里是开发级别
+
+redis:
+  ip: 127.0.0.1  # Redis服务器的IP地址
+  port: 6379  # Redis服务器的端口号
+  password: ""  # Redis服务器的密码，这里为空
+  pool_size: 100  # Redis连接池的大小
+
+es:
+  host: http://127.0.0.1  # Elasticsearch服务器的主机地址
+  port: 9200  # Elasticsearch服务器的端口号
+  user: ""  # Elasticsearch的用户名，这里为空
+  password: ""  # Elasticsearch的密码，这里为空
+
+logger:
+  level: info  # 日志记录级别，这里是信息级别
+  prefix: '[yuLog]'  # 日志前缀，用于标识日志来源
+  director: log  # 日志文件存储目录
+  show_line: true  # 是否显示日志记录的行号
+  log_in_console: true  # 是否在控制台输出日志
+
+upload:
+  size: 2  # 文件上传的最大大小限制
+  path: uploads/file  # 文件上传的存储路径
+
+qq:
+  app_id:  # QQ相关应用的App ID
+  key:  # QQ相关应用的密钥
+  redirect:  # QQ登录或其他操作的重定向地址
+
+qi_niu:
+  enable:  # 是否启用七牛云存储（true或false）
+  access_key:  # 七牛云的访问密钥
+  secret_key:  # 七牛云的秘密密钥
+  bucket:  # 七牛云存储的存储桶名称
+  cdn:  # 七牛云CDN的相关配置
+  zone:  # 七牛云存储区域
+  prefix:  # 七牛云存储文件路径的前缀
+  size:  # 七牛云相关的大小限制等配置
+
+email:
+  host: smtp.qq.com  # 邮件服务器的主机地址
+  port: 465  # 邮件服务器的端口号（使用SSL连接）
+  user:  # 发送邮件的邮箱用户名
+  password:  # 发送邮件的邮箱密码
+  default_from_email:  # 默认的发件人邮箱地址
+  use_ssl:  # 是否使用SSL连接（true或false）
+  user_tls:  # 是否使用TLS连接（true或false）
+
+jwt:
+  secret:  # JWT（JSON Web Token）的密钥
+  expires:  # JWT的过期时间
+  issuer:  # JWT的签发者
+
+chat_group:
+  isAnonymous: true  # 聊天室是否允许匿名用户
+  isShowTime: false  # 是否显示消息时间
+  defaultLimit: 50  # 聊天室默认的消息数量限制
+  contentLength: 101  # 聊天室消息的最大长度限制
+  welcomeTitle: 聊天室  # 聊天室的欢迎标题
+  isOnlinePeople: true  # 是否显示在线人员列表
+  isSendImage: true  # 是否允许发送图片
+  isSendFile: false  # 是否允许发送文件
+  isMd: true  # 是否支持Markdown格式消息
+
+gaode:
+  enable: true  # 是否启用高德地图相关功能
+  key: '******'  # 高德地图的API密钥
