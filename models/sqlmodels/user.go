@@ -30,8 +30,11 @@ func (*UserModel) TableName() string {
 
 /*============ database functions  ============*/
 
-func (u *UserModel) ISUserExist(username string) error {
+func (u *UserModel) ISUserExistByUsername(username string) error {
 	return global.DB.Take(&u, "user_name = ?", username).Error
+}
+func (u *UserModel) ISUserExistByUserID(userid string) error {
+	return global.DB.Take(&u, userid).Error
 }
 
 func (u *UserModel) CreateUser(user *UserModel) error {
@@ -46,4 +49,8 @@ func (u *UserModel) CreateUser(user *UserModel) error {
 		Addr:       user.Addr,
 		SignStatus: diverseType.SignEmail,
 	}).Error
+}
+
+func (u *UserModel) UpdateUser(mapdata map[string]any) error {
+	return global.DB.Model(&u).Updates(mapdata).Error
 }

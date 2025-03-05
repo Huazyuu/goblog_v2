@@ -16,7 +16,7 @@ type UserCreateRequest struct {
 	Role     diverseType.Role `json:"role" binding:"required" msg:"请选择权限"`       // 权限  1 管理员  2 普通用户  3 游客
 }
 
-func (UsersApi) UserRegister(c *gin.Context) {
+func (UsersApi) UserRegisterView(c *gin.Context) {
 	var cr UserCreateRequest
 	if err := c.ShouldBindJSON(&cr); err != nil {
 		res.FailWithError(err, &cr, c)
