@@ -22,7 +22,7 @@ func (SettingsApi) SettingsInfoUpdateView(c *gin.Context) {
 	}
 	err = settingsService.SetYaml()
 	if err != nil {
-		res.FailWithError(err, "设置信息错误", c)
+		res.FailWithMessage("设置信息错误", c)
 		global.Log.Error(err.Error())
 		return
 	}

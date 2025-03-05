@@ -1,6 +1,9 @@
 package sqlmodels
 
-import "backend/models/diverseType"
+import (
+	"backend/global"
+	"backend/models/diverseType"
+)
 
 // UserModel 用户表
 type UserModel struct {
@@ -21,6 +24,26 @@ type UserModel struct {
 	Link       string                 `gorm:"size:128;comment:我的链接地址" json:"link,select(info)"`                      // 我的链接地址
 }
 
-func (UserModel) TableName() string {
+func (*UserModel) TableName() string {
 	return "user"
+}
+
+/*============ database functions  ============*/
+
+func (u *UserModel) ISUserExist(username string) error {
+	return global.DB.Take(&u, "user_name = ?", username).Error
+}
+
+func (u *UserModel) CreateUser(user *UserModel) error {
+	return global.DB.Create(&UserModel{
+		NickName:   user.UserName,
+		UserName:   user.NickName,
+		Password:   user.Password,
+		Email:      user.Email,
+		Role:       user.Role,
+		Avatar:     user.Avatar,
+		IP:         user.IP,
+		Addr:       user.Addr,
+		SignStatus: diverseType.SignEmail,
+	}).Error
 }

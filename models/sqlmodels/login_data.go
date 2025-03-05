@@ -1,6 +1,9 @@
 package sqlmodels
 
-import "backend/models/diverseType"
+import (
+	"backend/global"
+	"backend/models/diverseType"
+)
 
 // LoginDataModel 统计用户登录数据 id, 用户id, 用户昵称，用户token，登录设备，登录时间
 type LoginDataModel struct {
@@ -17,4 +20,18 @@ type LoginDataModel struct {
 
 func (LoginDataModel) TableName() string {
 	return "login_data"
+}
+
+/*============ database functions  ============*/
+
+func (l LoginDataModel) CreateLoginData() error {
+	return global.DB.Create(&LoginDataModel{
+		UserID:    l.UserID,
+		IP:        l.IP,
+		NickName:  l.NickName,
+		Token:     l.Token,
+		Device:    l.Device,
+		Addr:      "内网地址",
+		LoginType: diverseType.SignEmail,
+	}).Error
 }

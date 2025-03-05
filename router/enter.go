@@ -28,5 +28,7 @@ func InitRouter() *gin.Engine {
 	r := RouterGroup{router.Group("apiv1")}
 	// routers
 	r.SettingsRouter()
+	r.ImagesRouter()
+	r.UsersRouter()
 	return router
 }
