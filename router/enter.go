@@ -25,9 +25,8 @@ func InitRouter() *gin.Engine {
 	// todo swagger
 	// router.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 
-	apiRouterGroup := router.Group("apiv1")
-	routerGroupApp := RouterGroup{apiRouterGroup}
+	r := RouterGroup{router.Group("apiv1")}
 	// routers
-	routerGroupApp.SettingsRouter()
+	r.SettingsRouter()
 	return router
 }

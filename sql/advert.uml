@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.advert</OriginalElement>
+  <nodes>
+    <node x="-2316.0" y="-543.0">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.message</node>
+    <node x="-1283.0" y="-462.5">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.collect</node>
+    <node x="-2056.0" y="99.0">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.menu_banner</node>
+    <node x="-1219.0" y="-213.0">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.advert</node>
+    <node x="-1511.0" y="-213.0">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.chat</node>
+    <node x="-1858.0" y="-213.0">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.menu</node>
+    <node x="-2316.0" y="-178.5">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.banner</node>
+    <node x="-2026.0" y="244.0">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.tag</node>
+    <node x="-2316.0" y="244.0">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.feedback</node>
+    <node x="-1600.0" y="-531.5">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.login_data</node>
+    <node x="-1962.0" y="-520.0">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.comment</node>
+    <node x="-2253.2115384615386" y="-1016.0">181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.user</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.message" target="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.user" relationship="REFERENCES">
+      <point x="78.5" y="-142.5" />
+      <point x="-2080.5" y="-563.0" />
+      <point x="-2097.7115384615386" y="-563.0" />
+      <point x="0.0" y="211.5" />
+    </edge>
+    <edge source="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.menu_banner" target="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.banner" relationship="REFERENCES">
+      <point x="-77.0" y="-50.0" />
+      <point x="-1979.0" y="74.0" />
+      <point x="-2097.0" y="74.0" />
+      <point x="0.0" y="96.5" />
+    </edge>
+    <edge source="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.comment" target="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.user" relationship="REFERENCES">
+      <point x="0.0" y="-119.5" />
+      <point x="-1791.0" y="-563.0" />
+      <point x="-1451.5" y="-563.0" />
+      <point x="-1451.5" y="-573.0" />
+      <point x="-1994.0448717948718" y="-573.0" />
+      <point x="103.66666666666674" y="211.5" />
+    </edge>
+    <edge source="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.collect" target="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.user" relationship="REFERENCES">
+      <point x="0.0" y="-62.0" />
+      <point x="-1155.0" y="-563.0" />
+      <point x="-1451.5" y="-563.0" />
+      <point x="-1451.5" y="-573.0" />
+      <point x="-1994.0448717948718" y="-573.0" />
+      <point x="103.66666666666674" y="211.5" />
+    </edge>
+    <edge source="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.comment" target="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.comment" relationship="REFERENCES">
+      <point x="0.0" y="119.5" />
+      <point x="-1791.0" y="-261.0" />
+      <point x="-1982.0" y="-261.0" />
+      <point x="-1982.0" y="-400.5" />
+      <point x="-171.0" y="-0.0" />
+    </edge>
+    <edge source="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.login_data" target="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.user" relationship="REFERENCES">
+      <point x="0.0" y="-131.0" />
+      <point x="-1451.5" y="-573.0" />
+      <point x="-1994.0448717948718" y="-573.0" />
+      <point x="103.66666666666674" y="211.5" />
+    </edge>
+    <edge source="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.menu_banner" target="181c0fbf-cd17-4c85-b178-14d14bddcb60.TABLE:yu_blog.menu" relationship="REFERENCES">
+      <point x="77.0" y="-50.0" />
+      <point x="-1825.0" y="74.0" />
+      <point x="-1707.0" y="74.0" />
+      <point x="0.0" y="131.0" />
+    </edge>
+  </edges>
+  <settings layout="分层" zoom="0.6271899088997898" showDependencies="false" x="-1635.0000000000002" y="-302.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>列</Category>
+    <Category>注释</Category>
+    <Category>键列</Category>
+  </Categories>
+</Diagram>
+

@@ -1,0 +1,31 @@
+response code
+Success int = 0 
+Error int = 7
+
+error code
+SettingsError ErrorCode = 1001 // 系统错误
+ArgumentError ErrorCode = 1002 // 参数错误
+
+image upload  type code
+Local ImageType = 1 // 本地
+QiNiu ImageType = 2 // 七牛云
+
+im message type code
+InRoomMsg  MsgType = 1 // 进入聊天室
+TextMsg    MsgType = 2 // 文本消息
+ImageMsg   MsgType = 3 // 图片消息
+VoiceMsg   MsgType = 4 // 语音消息
+VideoMsg   MsgType = 5 // 视频消息
+SystemMsg  MsgType = 6 // 系统消息
+OutRoomMsg MsgType = 7 // 退出聊天室
+
+user role code
+PermissionAdmin       Role = 1 // 管理员
+PermissionUser        Role = 2 // 普通登录人
+PermissionVisitor     Role = 3 // 游客
+PermissionDisableUser Role = 4 // 被禁用的用户
+
+login type code
+SignQQ    SignStatus = 1 // QQ
+SignGitee SignStatus = 2 // gitee
+SignEmail SignStatus = 3 // 邮箱

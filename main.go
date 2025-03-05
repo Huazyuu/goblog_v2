@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/core"
+	"backend/flags"
 	"backend/global"
 	"backend/router"
 )
@@ -9,6 +10,12 @@ import (
 func main() {
 	core.InitCore()
 	// todo flag
+	// 命令行参数绑定
+	option := flags.Parse()
+	if option.Run() {
+		return
+	}
+
 	// todo cron script
 	r := router.InitRouter()
 	addr := global.Config.System.Addr()
