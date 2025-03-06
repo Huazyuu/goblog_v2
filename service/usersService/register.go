@@ -9,7 +9,7 @@ import (
 
 func UserRegister(username, nickname, password string, role diverseType.Role, email string, ip string) error {
 	var user sqlmodels.UserModel
-	err := user.ISUserExistByUsername(username)
+	err := user.GetUserByUsername(username)
 	if err == nil {
 		return errors.New("用户名已存在")
 	}

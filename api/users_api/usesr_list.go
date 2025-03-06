@@ -3,6 +3,7 @@ package users_api
 import (
 	"backend/global"
 	"backend/middleware/jwt"
+	"backend/models/req"
 	"backend/models/res"
 	"backend/service/usersService"
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,7 @@ import (
 func (UsersApi) UserListView(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwt.CustomClaims)
-	var page usersService.UserListRequest
+	var page req.UserListRequest
 	if err := c.ShouldBindQuery(&page); err != nil {
 		res.FailWithCode(res.ArgumentError, c)
 		return

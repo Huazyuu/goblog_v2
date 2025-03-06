@@ -4,21 +4,17 @@ import (
 	"backend/middleware/jwt"
 	"backend/models/common"
 	"backend/models/diverseType"
+	"backend/models/req"
 	"backend/models/sqlmodels"
 	"strings"
 )
-
-type UserListRequest struct {
-	common.PageInfo
-	Role int `json:"role" form:"role"`
-}
 
 type UserResponse struct {
 	sqlmodels.UserModel
 	RoleID int `json:"role_id"`
 }
 
-func UsersList(claims *jwt.CustomClaims, page UserListRequest) ([]UserResponse, int64, error) {
+func UsersList(claims *jwt.CustomClaims, page req.UserListRequest) ([]UserResponse, int64, error) {
 	list, count, err := common.ComList(sqlmodels.UserModel{Role: diverseType.Role(page.Role)}, common.Option{
 		PageInfo: page.PageInfo,
 		Likes:    []string{"nick_name", "user_name"},

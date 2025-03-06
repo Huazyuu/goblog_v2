@@ -30,13 +30,6 @@ func (*UserModel) TableName() string {
 
 /*============ database functions  ============*/
 
-func (u *UserModel) ISUserExistByUsername(username string) error {
-	return global.DB.Take(&u, "user_name = ?", username).Error
-}
-func (u *UserModel) ISUserExistByUserID(userid string) error {
-	return global.DB.Take(&u, userid).Error
-}
-
 func (u *UserModel) CreateUser(user *UserModel) error {
 	return global.DB.Create(&UserModel{
 		NickName:   user.UserName,
@@ -53,4 +46,17 @@ func (u *UserModel) CreateUser(user *UserModel) error {
 
 func (u *UserModel) UpdateUser(mapdata map[string]any) error {
 	return global.DB.Model(&u).Updates(mapdata).Error
+}
+
+func (u *UserModel) GetUserById(id int) error {
+	return global.DB.Take(&u, id).Error
+}
+
+func (u *UserModel) GetUserByUsername(username string) error {
+	return global.DB.Take(&u, "user_name = ?", username).Error
+}
+
+func (u *UserModel) GetUsersByIDList(idList []uint) (userlist []UserModel, err error) {
+	err = global.DB.Find(&userlist, idList).Error
+	return userlist, err
 }

@@ -11,7 +11,7 @@ import (
 
 func UserLogin(c *gin.Context, username, password string) (string, error) {
 	var userModel sqlmodels.UserModel
-	err := userModel.ISUserExistByUsername(username)
+	err := userModel.GetUserByUsername(username)
 	if err != nil {
 		global.Log.Warn("用户名不存在")
 		return "", err

@@ -1,17 +1,14 @@
 package settings_api
 
 import (
+	"backend/models/req"
 	"backend/models/res"
 	"backend/service/settingsService"
 	"github.com/gin-gonic/gin"
 )
 
-type SettingsUri struct {
-	Name string `uri:"name"`
-}
-
 func (SettingsApi) SettingsInfoView(c *gin.Context) {
-	var cr SettingsUri
+	var cr req.SettingsUriRequest
 	err := c.ShouldBindUri(&cr)
 	if err != nil {
 		res.FailWithCode(res.ArgumentError, c)

@@ -2,13 +2,14 @@ package settings_api
 
 import (
 	"backend/global"
+	"backend/models/req"
 	"backend/models/res"
 	"backend/service/settingsService"
 	"github.com/gin-gonic/gin"
 )
 
 func (SettingsApi) SettingsInfoUpdateView(c *gin.Context) {
-	var cr SettingsUri
+	var cr req.SettingsUriRequest
 	err := c.ShouldBindUri(&cr)
 	if err != nil {
 		res.FailWithCode(res.ArgumentError, c)

@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"github.com/gin-contrib/sessions"
 	"math/rand"
-	"strconv"
 )
 
 func UserBindEmail(claims *jwt.CustomClaims, session sessions.Session, email, password string, code *string) (string, error) {
@@ -46,7 +45,7 @@ func UserBindEmail(claims *jwt.CustomClaims, session sessions.Session, email, pa
 
 	// 修改邮箱
 	var userModel sqlmodels.UserModel
-	err := userModel.ISUserExistByUserID(strconv.Itoa(int(claims.UserID)))
+	err := userModel.GetUserById(int(claims.UserID))
 	if err != nil {
 		return "用户不存在", err
 	}

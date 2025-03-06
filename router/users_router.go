@@ -19,4 +19,11 @@ func (router RouterGroup) UsersRouter() {
 	router.POST("users/bind_email", middleware.JwtAuth(), usersApi.UserBindEmailView)
 
 	router.GET("users", middleware.JwtAuth(), usersApi.UserListView)
+	router.GET("user_info", middleware.JwtAuth(), usersApi.UserInfoView)
+
+	router.PUT("user_role", middleware.JwtAdmin(), usersApi.UserUpdateRoleView)
+	router.PUT("user_password", middleware.JwtAuth(), usersApi.UserUpdatePasswordView)
+	router.PUT("user_info", middleware.JwtAuth(), usersApi.UserUpdateInfoView)
+
+	router.DELETE("users", middleware.JwtAdmin(), usersApi.UserRemoveView)
 }
