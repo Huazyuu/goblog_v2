@@ -50,7 +50,7 @@ logger:
   log_in_console: true  # 是否在控制台输出日志
 
 upload:
-  size: 2  # 文件上传的最大大小限制
+  size: 2  # 文件上传的最大大小限制 mb
   path: uploads/file  # 文件上传的存储路径
 
 qq:

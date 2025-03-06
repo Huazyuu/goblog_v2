@@ -1,7 +1,6 @@
 package settingsService
 
 import (
-	"backend/core"
 	"backend/global"
 	"gopkg.in/yaml.v3"
 	"io/fs"
@@ -13,7 +12,7 @@ func SetYaml() error {
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(core.ConfigFile, byteData, fs.ModePerm)
+	err = os.WriteFile("settings.yaml", byteData, fs.ModePerm)
 	if err != nil {
 		return err
 	}

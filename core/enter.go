@@ -3,8 +3,8 @@ package core
 import "backend/global"
 
 func InitCore() {
-	global.Config = initConf()
-	global.Log = initLogger()
+	global.Config = InitConf("")
+	global.Log = InitLogger()
 	global.AddrDB = initAddrDB()
 	global.DB = initGorm()
 	global.Redis = initRedis()

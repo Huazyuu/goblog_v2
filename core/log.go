@@ -10,7 +10,7 @@ import (
 	"path"
 )
 
-func initLogger() *logrus.Logger {
+func InitLogger() *logrus.Logger {
 	mLog := logrus.New()                                // 新建一个实例
 	mLog.SetOutput(os.Stdout)                           // 设置输出类型
 	mLog.SetReportCaller(global.Config.Logger.ShowLine) // 开启返回函数名和行号

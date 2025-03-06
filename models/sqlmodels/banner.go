@@ -30,3 +30,10 @@ func (b *BannerModel) BeforeDelete(tx *gorm.DB) (err error) {
 	}
 	return nil
 }
+
+func (b *BannerModel) IsBannerExistByHash() (err error) {
+	return global.DB.Take(&b, "hash = ?", b.Hash).Error
+}
+func (b *BannerModel) CreateBanner() (err error) {
+	return global.DB.Create(&b).Error
+}
