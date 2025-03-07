@@ -37,3 +37,14 @@ func (b *BannerModel) IsBannerExistByHash() (err error) {
 func (b *BannerModel) CreateBanner() (err error) {
 	return global.DB.Create(&b).Error
 }
+
+func (b *BannerModel) GetByPath(old string) error {
+	return global.DB.Where("path = ?", old).Find(&b).Error
+}
+
+func (b *BannerModel) GetByHash(hash string) error {
+	return global.DB.Take(&b, "hash = ?", hash).Error
+}
+func (b *BannerModel) UpdateBanner(mapdata map[string]any) error {
+	return global.DB.Model(&b).Updates(mapdata).Error
+}

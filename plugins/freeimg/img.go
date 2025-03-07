@@ -5,7 +5,7 @@ import (
 )
 
 type ImgUploadInterface interface {
-	Upload(filename string) string
+	Upload(filename string) (string, error)
 }
 
 var serveMap = map[string]ImgUploadInterface{
