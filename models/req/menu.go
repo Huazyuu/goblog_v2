@@ -16,3 +16,6 @@ type ImageSort struct {
 	ImageID uint `json:"image_id"`
 	Sort    int  `json:"sort"`
 }
+type MenuDetailRequest struct {
+	Path string `json:"path" form:"path"`
+}

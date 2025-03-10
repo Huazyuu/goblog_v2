@@ -22,6 +22,7 @@ type MenuModel struct {
 func (*MenuModel) TableName() string {
 	return "menu"
 }
+
 func (m *MenuModel) CreateMenuByParam(menu *MenuModel) error {
 	return global.DB.Create(&MenuModel{
 		Title:        menu.Title,

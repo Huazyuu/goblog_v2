@@ -11,40 +11,21 @@ import (
 	"fmt"
 )
 
-func MenuCreateService(cr req.MenuRequest) (string, error) {
+func UpdateMenu(menuID uint, cr req.MenuRequest) (string, error) {
 	tx := global.DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
 		}
 	}()
-
-	// 检查重复
-	exist, err := menu_repo.CheckMenuDuplicate(tx, cr.Title, cr.Path)
-	if err != nil {
+	if _, err := menu_repo.GetMenuByID(menuID); err != nil {
 		tx.Rollback()
-		return "系统错误", fmt.Errorf("重复检查失败: %w", err)
+		return "用户不存在", err
 	}
-	if exist {
+	// 清理旧关联
+	if err := menu_banner_repo.ClearByMenuID(tx, menuID); err != nil {
 		tx.Rollback()
-		return "菜单已存在", errors.New("duplicate menu")
-	}
-
-	// 创建菜单
-	menu := &sqlmodels.MenuModel{
-		Title:        cr.Title,
-		Path:         cr.Path,
-		Slogan:       cr.Slogan,
-		Abstract:     cr.Abstract,
-		AbstractTime: cr.AbstractTime,
-		BannerTime:   cr.BannerTime,
-		Sort:         cr.Sort,
-	}
-
-	if err = menu_repo.CreateMenu(tx, menu); err != nil {
-		tx.Rollback()
-		global.Log.Error("创建菜单失败: " + err.Error())
-		return "系统错误", fmt.Errorf("创建菜单失败: %w", err)
+		return "清理旧关联失败", err
 	}
 
 	// 处理图片关联
@@ -72,7 +53,7 @@ func MenuCreateService(cr req.MenuRequest) (string, error) {
 		var menuBanners []sqlmodels.MenuBannerModel
 		for _, img := range cr.ImageSortList {
 			menuBanners = append(menuBanners, sqlmodels.MenuBannerModel{
-				MenuID:   menu.ID,
+				MenuID:   menuID,
 				BannerID: img.ImageID,
 				Sort:     img.Sort,
 			})
@@ -84,12 +65,26 @@ func MenuCreateService(cr req.MenuRequest) (string, error) {
 			return "系统错误", fmt.Errorf("创建关联失败: %w", err)
 		}
 	}
+	// 更新基础信息
+	updateMap := map[string]interface{}{
+		"title":         cr.Title,
+		"path":          cr.Path,
+		"slogan":        cr.Slogan,
+		"abstract":      cr.Abstract,
+		"abstract_time": cr.AbstractTime,
+		"banner_time":   cr.BannerTime,
+		"sort":          cr.Sort,
+	}
 
-	if err = tx.Commit().Error; err != nil {
+	if err := menu_repo.UpdateMenu(tx, menuID, updateMap); err != nil {
+		tx.Rollback()
+		return "更新菜单失败", err
+	}
+	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
 		global.Log.Error("事务提交失败: " + err.Error())
 		return "系统错误", fmt.Errorf("事务提交失败: %w", err)
 	}
 
-	return "菜单创建成功", nil
+	return "菜单更新成功", nil
 }
