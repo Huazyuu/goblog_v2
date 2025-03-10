@@ -147,10 +147,9 @@ func calculateFileHash(file *multipart.FileHeader) string {
 
 func checkExistingFile(hash string) (bool, sqlmodels.BannerModel) {
 	var banner sqlmodels.BannerModel
-	if err := banner.GetByHash(hash); err != nil {
+	if _, err := img_repo.GetByHash(hash); err != nil {
 		return false, banner
 	}
-	global.Log.Info(banner)
 	return true, banner
 }
 
@@ -164,11 +163,11 @@ func saveFileRecord(hash, path, name string, imgType diverseType.ImageType) erro
 }
 
 func updateFileRecord(oldPath, newPath string, imgType diverseType.ImageType) error {
-	var banner sqlmodels.BannerModel
-	if err := banner.GetByPath(oldPath); err != nil {
+	img, err := img_repo.GetByPath(oldPath)
+	if err != nil {
 		return err
 	}
-	return banner.UpdateBanner(map[string]any{
+	return img_repo.UpdateBanner(img.ID, map[string]any{
 		"Path":      newPath,
 		"ImageType": imgType,
 	})

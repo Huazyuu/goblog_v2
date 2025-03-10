@@ -1,7 +1,6 @@
 package sqlmodels
 
 import (
-	"backend/global"
 	"backend/models/diverseType"
 )
 
@@ -26,37 +25,4 @@ type UserModel struct {
 
 func (*UserModel) TableName() string {
 	return "user"
-}
-
-/*============ database functions  ============*/
-
-func (u *UserModel) CreateUser(user *UserModel) error {
-	return global.DB.Create(&UserModel{
-		NickName:   user.UserName,
-		UserName:   user.NickName,
-		Password:   user.Password,
-		Email:      user.Email,
-		Role:       user.Role,
-		Avatar:     user.Avatar,
-		IP:         user.IP,
-		Addr:       user.Addr,
-		SignStatus: diverseType.SignEmail,
-	}).Error
-}
-
-func (u *UserModel) UpdateUser(mapdata map[string]any) error {
-	return global.DB.Model(&u).Updates(mapdata).Error
-}
-
-func (u *UserModel) GetUserById(id int) error {
-	return global.DB.Take(&u, id).Error
-}
-
-func (u *UserModel) GetUserByUsername(username string) error {
-	return global.DB.Take(&u, "user_name = ?", username).Error
-}
-
-func (u *UserModel) GetUsersByIDList(idList []uint) (userlist []UserModel, err error) {
-	err = global.DB.Find(&userlist, idList).Error
-	return userlist, err
 }

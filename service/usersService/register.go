@@ -2,14 +2,13 @@ package usersService
 
 import (
 	"backend/models/diverseType"
-	"backend/models/sqlmodels"
+	"backend/repository/user_repo"
 	"backend/utils"
 	"errors"
 )
 
 func UserRegister(username, nickname, password string, role diverseType.Role, email string, ip string) error {
-	var user sqlmodels.UserModel
-	err := user.GetUserByUsername(username)
+	user, err := user_repo.GetByUserName(username)
 	if err == nil {
 		return errors.New("用户名已存在")
 	}
@@ -22,7 +21,7 @@ func UserRegister(username, nickname, password string, role diverseType.Role, em
 	user.IP = ip
 	user.Addr = "内网地址"
 
-	err = user.CreateUser(&user)
+	err = user_repo.CreateUser(user)
 	if err != nil {
 		return err
 	}

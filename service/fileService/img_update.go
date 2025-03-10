@@ -1,17 +1,16 @@
 package fileService
 
 import (
-	"backend/models/sqlmodels"
+	"backend/repository/img_repo"
 	"fmt"
 )
 
 func ImageUpdateNameByID(id uint, name string) (string, error) {
-	var imageModel sqlmodels.BannerModel
-	err := imageModel.GetByID(id)
+	_, err := img_repo.GetByID(id)
 	if err != nil {
 		return "文件不存在", err
 	}
-	err = imageModel.UpdateBanner(map[string]any{
+	err = img_repo.UpdateBanner(id, map[string]any{
 		"name": name,
 	})
 	if err != nil {

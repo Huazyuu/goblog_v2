@@ -34,7 +34,7 @@ func (UsersApi) UserUpdatePasswordView(c *gin.Context) {
 		res.FailWithError(err, &cr, c)
 		return
 	}
-	msg, err := usersService.UserUpdatePwd(int(claims.UserID), cr.OldPwd, cr.Pwd)
+	msg, err := usersService.UserUpdatePwd(claims.UserID, cr.OldPwd, cr.Pwd)
 	if err != nil {
 		global.Log.Error(err)
 		res.FailWithMessage(msg, c)
@@ -53,7 +53,7 @@ func (UsersApi) UserUpdateInfoView(c *gin.Context) {
 		res.FailWithCode(res.ArgumentError, c)
 		return
 	}
-	msg, err := usersService.UserUpdateInfo(int(claims.UserID), cr)
+	msg, err := usersService.UserUpdateInfo(claims.UserID, cr)
 	if err != nil {
 		global.Log.Error(err)
 		res.FailWithMessage(msg, c)

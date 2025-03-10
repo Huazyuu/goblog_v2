@@ -3,8 +3,8 @@ package usersService
 import (
 	"backend/global"
 	"backend/middleware/jwt"
-	"backend/models/sqlmodels"
 	"backend/plugins/email_plugin"
+	"backend/repository/user_repo"
 	"backend/utils"
 	"errors"
 	"fmt"
@@ -44,15 +44,14 @@ func UserBindEmail(claims *jwt.CustomClaims, session sessions.Session, email, pa
 	}
 
 	// 修改邮箱
-	var userModel sqlmodels.UserModel
-	err := userModel.GetUserById(int(claims.UserID))
+	userModel, err := user_repo.GetByID(claims.UserID)
 	if err != nil {
 		return "用户不存在", err
 	}
 	if len(password) < 6 {
 		return "密码强度太低", errors.New("密码强度太低")
 	}
-	err = userModel.UpdateUser(map[string]any{
+	err = user_repo.UpdateUser(userModel.ID, map[string]any{
 		"email":    email,
 		"password": utils.EncryptPwd(password),
 	})

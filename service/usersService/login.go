@@ -4,14 +4,14 @@ import (
 	"backend/global"
 	"backend/middleware/jwt"
 	"backend/models/sqlmodels"
+	"backend/repository/user_repo"
 	"backend/utils"
 	"errors"
 	"github.com/gin-gonic/gin"
 )
 
 func UserLogin(c *gin.Context, username, password string) (string, error) {
-	var userModel sqlmodels.UserModel
-	err := userModel.GetUserByUsername(username)
+	userModel, err := user_repo.GetByUserName(username)
 	if err != nil {
 		global.Log.Warn("用户名不存在")
 		return "", err

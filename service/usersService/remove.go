@@ -3,14 +3,13 @@ package usersService
 import (
 	"backend/global"
 	"backend/models/req"
-	"backend/models/sqlmodels"
+	"backend/repository/user_repo"
 	"errors"
 	"fmt"
-	"gorm.io/gorm"
 )
 
 func UserRemove(cr req.RemoveRequest) (string, error) {
-	ulist, err := (&sqlmodels.UserModel{}).GetUsersByIDList(cr.IDList)
+	ulist, err := user_repo.GetUsersByIDList(cr.IDList)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return "查找出错", err
@@ -19,19 +18,11 @@ func UserRemove(cr req.RemoveRequest) (string, error) {
 		return "用户不存在", errors.New("用户不存在")
 	}
 
-	// 事务
-	err = global.DB.Transaction(func(tx *gorm.DB) error {
-		err = tx.Delete(&ulist).Error
-		if err != nil {
-			global.Log.Error(err)
-			return err
-		}
-		return nil
-	})
+	cnt, err := user_repo.DeleteUsers(ulist)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return "删除失败", err
 	}
-	return "删除成功 " + fmt.Sprintf("共删除 %d 个用户", len(ulist)), err
+	return "删除成功 " + fmt.Sprintf("共删除 %d 个用户", cnt), err
 
 }

@@ -1,7 +1,5 @@
 package sqlmodels
 
-import "backend/global"
-
 // AdvertModel 广告表
 type AdvertModel struct {
 	MODEL
@@ -13,22 +11,4 @@ type AdvertModel struct {
 
 func (*AdvertModel) TableName() string {
 	return "advert"
-}
-func (a *AdvertModel) CreateAdvert() (err error) {
-	return global.DB.Create(&a).Error
-}
-
-func (a *AdvertModel) GetByTitle(title string) error {
-	return global.DB.Take(&a, "title = ?", title).Error
-}
-func (a *AdvertModel) GetByID(id any) error {
-	return global.DB.Take(&a, "id = ?", id).Error
-}
-
-func (a *AdvertModel) UpdateAdvert(mapdata map[string]any) error {
-	return global.DB.Model(&a).Updates(mapdata).Error
-}
-func (a *AdvertModel) GetAdvertsByIDList(idList []uint) (advertList []AdvertModel, err error) {
-	err = global.DB.Find(&advertList, idList).Error
-	return advertList, err
 }
