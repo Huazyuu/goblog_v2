@@ -5,6 +5,7 @@ import (
 	"backend/models/diverseType"
 	"backend/models/sqlmodels"
 	"backend/plugins/freeimg"
+	"backend/repository/img_repo"
 	"backend/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -154,13 +155,12 @@ func checkExistingFile(hash string) (bool, sqlmodels.BannerModel) {
 }
 
 func saveFileRecord(hash, path, name string, imgType diverseType.ImageType) error {
-	var banner = sqlmodels.BannerModel{
+	return img_repo.CreateBanner(sqlmodels.BannerModel{
 		Path:      path,
 		Hash:      hash,
 		Name:      name,
 		ImageType: imgType,
-	}
-	return banner.CreateBanner()
+	})
 }
 
 func updateFileRecord(oldPath, newPath string, imgType diverseType.ImageType) error {

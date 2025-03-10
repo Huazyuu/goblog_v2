@@ -1,6 +1,10 @@
 package sqlmodels
 
-import "backend/models/diverseType"
+import (
+	"backend/global"
+	"backend/models/diverseType"
+	"gorm.io/gorm"
+)
 
 // MenuModel 菜单表  菜单的路径可以是 /path 也可以是路由别名
 type MenuModel struct {
@@ -15,6 +19,29 @@ type MenuModel struct {
 	Sort         int               `gorm:"size:10;comment:顺序" json:"sort"`                                                            // 菜单的顺序
 }
 
-func (MenuModel) TableName() string {
+func (*MenuModel) TableName() string {
 	return "menu"
+}
+func (m *MenuModel) CreateMenuByParam(menu *MenuModel) error {
+	return global.DB.Create(&MenuModel{
+		Title:        menu.Title,
+		Path:         menu.Path,
+		Slogan:       menu.Slogan,
+		Abstract:     menu.Abstract,
+		AbstractTime: menu.AbstractTime,
+		BannerTime:   menu.BannerTime,
+		Sort:         menu.Sort,
+	}).Error
+}
+func (m *MenuModel) CreateMenu() error {
+	return global.DB.Create(m).Error
+}
+
+// IsDuplicate 使用事务进行重复检查
+func (m MenuModel) IsDuplicate(tx *gorm.DB, title, path string) (int64, error) {
+	var count int64
+	err := tx.Model(&MenuModel{}).
+		Where("title = ? OR path = ?", title, path).
+		Count(&count).Error
+	return count, err
 }

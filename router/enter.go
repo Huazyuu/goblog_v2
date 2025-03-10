@@ -31,5 +31,6 @@ func InitRouter() *gin.Engine {
 	r.ImagesRouter()
 	r.UsersRouter()
 	r.AdvertRouter()
+	r.MenuRouter()
 	return router
 }
