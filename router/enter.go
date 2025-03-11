@@ -28,9 +28,10 @@ func InitRouter() *gin.Engine {
 	r := RouterGroup{router.Group("apiv1")}
 	// routers
 	r.SettingsRouter()
-	r.ImagesRouter()
 	r.UsersRouter()
+	r.ImagesRouter()
 	r.AdvertRouter()
 	r.MenuRouter()
+	r.TagRouter()
 	return router
 }
