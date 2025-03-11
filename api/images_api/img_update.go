@@ -1,18 +1,14 @@
 package images_api
 
 import (
+	"backend/models/req"
 	"backend/models/res"
 	"backend/service/fileService"
 	"github.com/gin-gonic/gin"
 )
 
-type ImageNameUpdateRequest struct {
-	ID   uint   `json:"id" binding:"required" msg:"请选择文件id"`
-	Name string `json:"name" binding:"required" msg:"请输入文件名称"`
-}
-
 func (ImagesApi) ImageUpdateView(c *gin.Context) {
-	var cr ImageNameUpdateRequest
+	var cr req.ImageNameUpdateRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {
 		res.FailWithError(err, &cr, c)

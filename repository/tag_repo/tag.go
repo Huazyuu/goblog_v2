@@ -27,7 +27,6 @@ func DeleteTags(tags []sqlmodels.TagModel) (count int64, err error) {
 	err = res.Error
 	return count, err
 }
-
 func GetTagsByIDList(idList []uint) (tagLists []sqlmodels.TagModel, err error) {
 	err = global.DB.Find(&tagLists, idList).Error
 	return tagLists, err
