@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func initES() *elastic.Client {
+func InitES() *elastic.Client {
 	var err error
 	sniffOpt := elastic.SetSniff(false)
 	c, err := elastic.NewClient(
@@ -17,5 +17,6 @@ func initES() *elastic.Client {
 	if err != nil {
 		logrus.Fatalf("es连接失败 %s", err.Error())
 	}
+	logrus.Info("init es success")
 	return c
 }

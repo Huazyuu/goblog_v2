@@ -1,4 +1,4 @@
-package freeimg
+package flags
 
 import (
 	"backend/core"
@@ -9,19 +9,6 @@ import (
 	"runtime"
 	"testing"
 )
-
-func init() {
-	// 获取并切换到项目根目录
-	root := getProjectRoot()
-	if err := os.Chdir(root); err != nil {
-		log.Fatalf("切换工作目录失败: %v", err)
-	}
-
-	// 初始化应用配置（现在可以使用相对路径）
-	global.Config = core.InitConf() // 根目录下的配置文件
-	global.Log = core.InitLogger()
-	global.ESClient = core.InitES()
-}
 
 // getProjectRoot 获取项目绝对根路径（包含go.mod的目录）
 func getProjectRoot() string {
@@ -48,17 +35,19 @@ func getProjectRoot() string {
 		currentDir = parentDir
 	}
 }
-
-func Test_freeImgUpload(t *testing.T) {
-	global.Config = core.InitConf()
-	global.Log = core.InitLogger()
-	// 替换为实际的本地文件路径
-	uploadFile := "D:\\goProject\\goblogv2\\backend\\uploads\\avatar\\default.png"
-	url, _ := freeImgUpload(uploadFile)
-	if url != "" {
-		t.Logf("上传成功，图片显示 URL: %s\n", url)
-	} else {
-		t.Fatal("上传失败")
-		return
+func init() {
+	// 获取并切换到项目根目录
+	root := getProjectRoot()
+	if err := os.Chdir(root); err != nil {
+		log.Fatalf("切换工作目录失败: %v", err)
 	}
+
+	// 初始化应用配置（现在可以使用相对路径）
+	global.Config = core.InitConf() // 根目录下的配置文件
+	global.Log = core.InitLogger()
+	global.ESClient = core.InitES()
+}
+
+func Test_esCreate(t *testing.T) {
+	esCreate()
 }

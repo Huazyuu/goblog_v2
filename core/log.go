@@ -21,6 +21,7 @@ func InitLogger() *logrus.Logger {
 	}
 	mLog.SetLevel(level) // 设置最低的Level
 	initDefaultLogger()
+	logrus.Info("init log success")
 	return mLog
 }
 

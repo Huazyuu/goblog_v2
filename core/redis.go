@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func initRedis() *redis.Client {
+func InitRedis() *redis.Client {
 	return ConnectRedisDB(0)
 }
 
@@ -28,5 +28,6 @@ func ConnectRedisDB(db int) *redis.Client {
 		logrus.Errorf("redis连接失败 %s", redisConf.Addr())
 		return nil
 	}
+	logrus.Info("init redis success")
 	return rdb
 }

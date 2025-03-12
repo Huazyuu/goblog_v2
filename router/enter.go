@@ -34,5 +34,6 @@ func InitRouter() *gin.Engine {
 	r.MenuRouter()
 	r.TagRouter()
 	r.MessageRouter()
+	r.ArticleRouter()
 	return router
 }

@@ -9,13 +9,10 @@ import (
 	"os"
 )
 
-func InitConf(path string) *config.Config {
+func InitConf() *config.Config {
 	c := &config.Config{}
 	confPath := "settings.yaml"
-	if path == "" {
-		path = confPath
-	}
-	yamlConf, err := os.ReadFile(path)
+	yamlConf, err := os.ReadFile(confPath)
 	if err != nil {
 		panic(fmt.Errorf("get yamlConf error: %s", err))
 	}
