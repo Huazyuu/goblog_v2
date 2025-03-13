@@ -8,14 +8,14 @@ import (
 
 func esCreate() {
 	idxService := indexService.NewIndexService(global.ESClient, global.Log)
-	err:=idxService.CreateIndexWithRetry(esmodels.ArticleModel{})
+	err := idxService.CreateIndex(esmodels.ArticleModel{})
 	if err != nil {
-		global.Log.Error("CreateIndexWithRetry", "err", err)
+		global.Log.Error("CreateIndex", "err", err)
 		return
 	}
-	err=idxService.CreateIndexWithRetry(esmodels.FullTextModel{})
+	err = idxService.CreateIndex(esmodels.FullTextModel{})
 	if err != nil {
-		global.Log.Error("CreateIndexWithRetry", "err", err)
+		global.Log.Error("CreateIndex", "err", err)
 		return
 	}
 }

@@ -32,6 +32,11 @@ func GetUsersByIDList(idList []uint) (usersList []sqlmodels.UserModel, err error
 	return usersList, err
 }
 
+func GetAvatarByID(userID uint) (avatar string, err error) {
+	err = global.DB.Model(sqlmodels.UserModel{}).Where("id = ?", userID).Select("avatar").Scan(&avatar).Error
+	return avatar, err
+}
+
 func DeleteUsers(userList []sqlmodels.UserModel) (count int64, err error) {
 	err = global.DB.Transaction(func(tx *gorm.DB) error {
 		// 遍历要删除的 User 记录

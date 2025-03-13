@@ -36,6 +36,15 @@ func GetBannersByIDList(idList []uint) (bannerList []sqlmodels.BannerModel, err 
 	err = global.DB.Find(&bannerList, idList).Error
 	return bannerList, err
 }
+func GetBannersID() (bannerIDList []uint, err error) {
+	err = global.DB.Model(sqlmodels.BannerModel{}).Select("id").Scan(&bannerIDList).Error
+	return bannerIDList, err
+}
+
+func GetPathByID(id uint) (path string, err error) {
+	err = global.DB.Model(sqlmodels.BannerModel{}).Where("id = ?", id).Select("path").Scan(&path).Error
+	return path, err
+}
 
 func DeleteImgs(imglist []sqlmodels.BannerModel) (count int64, err error) {
 	err = global.DB.Transaction(func(tx *gorm.DB) error {

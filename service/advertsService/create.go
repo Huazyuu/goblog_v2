@@ -1,6 +1,5 @@
 package advertsService
 
-import "C"
 import (
 	"backend/models/req"
 	"backend/models/sqlmodels"

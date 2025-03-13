@@ -5,7 +5,7 @@ import (
 	"backend/models/sqlmodels"
 )
 
-func db() {
+func dbCreate() {
 	var err error
 	// MenuModel 和 Banners 之间存在多对多关系，并且使用 MenuBannerModel 作为连接表来记录这种关系
 	global.DB.SetupJoinTable(&sqlmodels.MenuModel{}, "Banners", &sqlmodels.MenuBannerModel{})

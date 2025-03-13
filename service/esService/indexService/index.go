@@ -20,13 +20,15 @@ func NewIndexService(esClient *elastic.Client, logger *logrus.Logger) *Service {
 	}
 }
 
-// CreateIndexWithRetry 带重试机制的索引创建
-func (s *Service) CreateIndexWithRetry( ei esmodels.ESIndexInterFace) error {
+// CreateIndex 索引创建
+func (s *Service) CreateIndex(ei esmodels.ESIndexInterFace) error {
 	if s.esClient == nil {
+		s.logger.Warn("CreateIndex", "ES client not initialized")
 		return fmt.Errorf("elasticsearch client not initialized")
 	}
 
 	if err := ei.CreateIndex(); err != nil {
+		s.logger.Warn("CreateIndex", "CreateIndex err", err)
 		return err
 	}
 
