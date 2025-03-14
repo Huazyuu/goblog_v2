@@ -22,3 +22,18 @@ func (ArticleApi) ArticleDetailByTitleView(c *gin.Context) {
 	}
 	res.OkWithData(model, c)
 }
+func (ArticleApi) ArticleDetailByIDView(c *gin.Context) {
+	var cr req.ESIDRequest
+	err := c.ShouldBindUri(&cr)
+	if err != nil {
+		res.FailWithCode(res.ArgumentError, c)
+		return
+	}
+	// todo redis lookcnt++
+	article, err := article_repo.GetArticleByID(cr.ID)
+	if err != nil {
+		res.FailWithMessage("没有该文章", c)
+		return
+	}
+	res.OkWithData(article, c)
+}

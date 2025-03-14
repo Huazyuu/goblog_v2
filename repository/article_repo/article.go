@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/olivere/elastic/v7"
 	"github.com/sirupsen/logrus"
 	"strings"
@@ -58,6 +59,41 @@ func GetArticleByID(id string) (article esmodels.ArticleModel, err error) {
 	// article.DiggCount =article.DiggCount + redis_ser.NewDigg().Get(res.Id)
 	// article.CommentCount =article.CommentCount + redis_ser.NewCommentCount().Get(res.Id)
 	return article, err
+}
+
+func GetArticleIDListByUserID(userid uint) (articleIDList []string, err error) {
+	// 构建 Elasticsearch 查询条件，使用 TermQuery 来精确匹配 userid 字段
+	query := elastic.NewTermQuery("user_id", userid)
+	result, err := global.ESClient.Search().
+		Index(esmodels.ArticleModel{}.Index()). // 指定索引名称
+		Query(query).                           // 设置查询条件
+		Size(10000).                            // 设置返回结果的最大数量，可根据实际情况调整
+		Do(context.Background())                // 执行搜索请求
+	if err != nil {
+		return nil, fmt.Errorf("failed to search articles by user ID: %w", err)
+	}
+
+	// 遍历搜索结果，提取文章 ID
+	for _, hit := range result.Hits.Hits {
+		articleIDList = append(articleIDList, hit.Id)
+	}
+
+	return articleIDList, nil
+}
+
+func GetArticleIDList() (articleIDList []string, err error) {
+	result, err := global.ESClient.Search().
+		Index(esmodels.ArticleModel{}.Index()).
+		Query(elastic.NewMatchAllQuery()).
+		Size(10000).
+		Do(context.Background())
+	if err != nil {
+		return nil, fmt.Errorf("failed to search articles by user ID: %w", err)
+	}
+	for _, hit := range result.Hits.Hits {
+		articleIDList = append(articleIDList, hit.Id)
+	}
+	return articleIDList, nil
 }
 
 func GetArticleByKeyword(keyword string) (article esmodels.ArticleModel, err error) {
@@ -173,4 +209,18 @@ func GetArticleList(option Option) (list []esmodels.ArticleModel, count int, err
 		list = append(list, resp)
 	}
 	return list, count, nil
+}
+
+func RemoveArticleByList(idlist []string) (int, error) {
+	bulk := global.ESClient.Bulk().Index(esmodels.ArticleModel{}.Index()).Refresh("true")
+	for _, id := range idlist {
+		req := elastic.NewBulkDeleteRequest().Id(id)
+		bulk.Add(req)
+		// todo 删除全文搜索
+	}
+	res, err := bulk.Do(context.Background())
+	if err != nil {
+		return 0, err
+	}
+	return len(res.Succeeded()), nil
 }
