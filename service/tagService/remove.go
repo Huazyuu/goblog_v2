@@ -1,8 +1,9 @@
 package tagService
 
 import (
+	"backend/controller/req"
 	"backend/global"
-	"backend/models/req"
+
 	"backend/repository/tag_repo"
 	"errors"
 	"fmt"

@@ -2,8 +2,9 @@ package settingsService
 
 import (
 	"backend/config"
+	"backend/controller/res"
 	"backend/global"
-	"backend/models/res"
+
 	"errors"
 	"github.com/gin-gonic/gin"
 )

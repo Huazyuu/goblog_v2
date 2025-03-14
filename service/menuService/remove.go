@@ -1,8 +1,8 @@
 package menuService
 
 import (
+	"backend/controller/req"
 	"backend/global"
-	"backend/models/req"
 	"backend/repository/menu_repo"
 	"errors"
 	"fmt"

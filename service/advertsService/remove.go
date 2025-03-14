@@ -1,8 +1,9 @@
 package advertsService
 
 import (
+	"backend/controller/req"
 	"backend/global"
-	"backend/models/req"
+
 	"backend/repository/advert_repo"
 	"errors"
 	"fmt"

@@ -1,7 +1,7 @@
 package tagService
 
 import (
-	"backend/models/req"
+	"backend/controller/req"
 	"backend/repository/tag_repo"
 	"github.com/fatih/structs"
 )

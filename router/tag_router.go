@@ -1,7 +1,7 @@
 package router
 
 import (
-	"backend/api"
+	"backend/controller/api"
 	"backend/middleware"
 )
 

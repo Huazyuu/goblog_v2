@@ -1,8 +1,9 @@
 package fileService
 
 import (
+	"backend/controller/req"
 	"backend/global"
-	"backend/models/req"
+
 	"backend/repository/img_repo"
 	"errors"
 	"fmt"

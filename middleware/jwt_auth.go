@@ -1,10 +1,11 @@
 package middleware
 
 import (
+	"backend/controller/res"
 	"backend/global"
 	"backend/middleware/jwt"
 	"backend/models/diverseType"
-	"backend/models/res"
+
 	"backend/service/redisService"
 	"github.com/gin-gonic/gin"
 	"strings"

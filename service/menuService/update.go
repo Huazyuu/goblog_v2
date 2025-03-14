@@ -1,8 +1,8 @@
 package menuService
 
 import (
+	"backend/controller/req"
 	"backend/global"
-	"backend/models/req"
 	"backend/models/sqlmodels"
 	"backend/repository/img_repo"
 	"backend/repository/menu_banner_repo"

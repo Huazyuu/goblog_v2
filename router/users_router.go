@@ -1,7 +1,7 @@
 package router
 
 import (
-	"backend/api"
+	"backend/controller/api"
 	"backend/middleware"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"

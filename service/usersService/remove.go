@@ -1,8 +1,9 @@
 package usersService
 
 import (
+	"backend/controller/req"
 	"backend/global"
-	"backend/models/req"
+
 	"backend/repository/user_repo"
 	"errors"
 	"fmt"

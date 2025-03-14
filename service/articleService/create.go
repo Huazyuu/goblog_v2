@@ -1,10 +1,10 @@
 package articleService
 
 import (
+	"backend/controller/req"
 	"backend/global"
 	"backend/middleware/jwt"
 	"backend/models/esmodels"
-	"backend/models/req"
 	"backend/repository/article_repo"
 	"backend/repository/img_repo"
 	"backend/repository/user_repo"

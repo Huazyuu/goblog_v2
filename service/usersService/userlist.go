@@ -1,10 +1,9 @@
 package usersService
 
 import (
+	"backend/controller/req"
 	"backend/middleware/jwt"
-	"backend/models/common"
 	"backend/models/diverseType"
-	"backend/models/req"
 	"backend/models/sqlmodels"
 	"strings"
 )
@@ -15,7 +14,7 @@ type UserResponse struct {
 }
 
 func UsersList(claims *jwt.CustomClaims, page req.UserListRequest) ([]UserResponse, int64, error) {
-	list, count, err := common.ComList(sqlmodels.UserModel{Role: diverseType.Role(page.Role)}, common.Option{
+	list, count, err := req.ComList(sqlmodels.UserModel{Role: diverseType.Role(page.Role)}, req.Option{
 		PageInfo: page.PageInfo,
 		Likes:    []string{"nick_name", "user_name"},
 	})

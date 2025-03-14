@@ -3,6 +3,7 @@ package tag_repo
 import (
 	"backend/global"
 	"backend/models/sqlmodels"
+	"time"
 )
 
 func GetByTitle(title string) (sqlmodels.TagModel, error) {
@@ -30,4 +31,19 @@ func DeleteTags(tags []sqlmodels.TagModel) (count int64, err error) {
 func GetTagsByIDList(idList []uint) (tagLists []sqlmodels.TagModel, err error) {
 	err = global.DB.Find(&tagLists, idList).Error
 	return tagLists, err
+}
+
+func GetTagCreateTimes(tags []string) (map[string]string, error) {
+	var tagModels []sqlmodels.TagModel
+	if err := global.DB.
+		Where("title IN ?", tags).
+		Find(&tagModels).Error; err != nil {
+		return nil, err
+	}
+
+	result := make(map[string]string)
+	for _, t := range tagModels {
+		result[t.Title] = t.CreatedAt.Format(time.DateTime)
+	}
+	return result, nil
 }

@@ -1,8 +1,8 @@
 package usersService
 
 import (
+	"backend/controller/req"
 	"backend/global"
-	"backend/models/req"
 	"backend/models/sqlmodels"
 	"backend/repository/user_repo"
 	"backend/utils"

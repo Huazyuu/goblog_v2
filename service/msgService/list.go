@@ -1,15 +1,15 @@
 package msgService
 
 import (
-	"backend/models/common"
-	"backend/models/req"
+	"backend/controller/req"
+
 	"backend/models/sqlmodels"
 	"backend/repository/msg_repo"
 	"backend/repository/user_repo"
 )
 
-func MsgAllList(cr common.PageInfo) ([]sqlmodels.MessageModel, int64, error) {
-	list, cnt, err := common.ComList(sqlmodels.MessageModel{}, common.Option{
+func MsgAllList(cr req.PageInfo) ([]sqlmodels.MessageModel, int64, error) {
+	list, cnt, err := req.ComList(sqlmodels.MessageModel{}, req.Option{
 		PageInfo: cr,
 	})
 	if err != nil {

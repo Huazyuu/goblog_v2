@@ -1,12 +1,12 @@
 package tagService
 
 import (
-	"backend/models/common"
+	"backend/controller/req"
 	"backend/models/sqlmodels"
 )
 
-func TagList(cr common.PageInfo) ([]sqlmodels.TagModel, int64, error) {
-	list, cnt, err := common.ComList(sqlmodels.TagModel{}, common.Option{
+func TagList(cr req.PageInfo) ([]sqlmodels.TagModel, int64, error) {
+	list, cnt, err := req.ComList(sqlmodels.TagModel{}, req.Option{
 		PageInfo: cr,
 	})
 	if err != nil {

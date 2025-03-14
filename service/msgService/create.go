@@ -1,7 +1,7 @@
 package msgService
 
 import (
-	"backend/models/req"
+	"backend/controller/req"
 	"backend/models/sqlmodels"
 	"backend/repository/msg_repo"
 	"backend/repository/user_repo"

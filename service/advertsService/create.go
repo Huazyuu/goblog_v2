@@ -1,7 +1,7 @@
 package advertsService
 
 import (
-	"backend/models/req"
+	"backend/controller/req"
 	"backend/models/sqlmodels"
 	"backend/repository/advert_repo"
 	"errors"

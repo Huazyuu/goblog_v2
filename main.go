@@ -9,8 +9,7 @@ import (
 
 func main() {
 	core.InitCore()
-	// todo flag
-	// 命令行参数绑定
+
 	option := flags.Parse()
 	if option.Run() {
 		return
