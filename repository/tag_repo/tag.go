@@ -11,6 +11,14 @@ func GetByTitle(title string) (sqlmodels.TagModel, error) {
 	err := global.DB.Where("title = ?", title).Take(&model).Error
 	return model, err
 }
+func IsExistTagByTitle(title string) (bool, error) {
+	var model sqlmodels.TagModel
+	err := global.DB.Where("title = ?", title).Take(&model).Error
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
 func GetByID(id uint) (sqlmodels.TagModel, error) {
 	var model sqlmodels.TagModel
 	err := global.DB.Where(id).Take(&model).Error

@@ -5,10 +5,9 @@ import (
 	"backend/controller/res"
 	"backend/global"
 	"backend/models/sqlmodels"
+	"backend/service/fileService"
 	"github.com/gin-gonic/gin"
 )
-
-// todo ImageListView 图片列表 文章 菜单图片关联
 
 func (ImagesApi) ImageListView(c *gin.Context) {
 	var cr req.PageInfo
@@ -17,12 +16,8 @@ func (ImagesApi) ImageListView(c *gin.Context) {
 		res.FailWithCode(res.ArgumentError, c)
 		return
 	}
-	imageList, cnt, err := req.ComList(sqlmodels.BannerModel{}, req.Option{
-		PageInfo: cr,
-		Debug:    true,
-		Likes:    []string{"name", "path"},
-	})
-	res.OkWithList(imageList, cnt, c)
+	imageList, err := fileService.ImageListService(cr)
+	res.OkWithList(imageList, int64(len(imageList)), c)
 }
 
 type ImageResponse struct {

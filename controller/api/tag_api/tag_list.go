@@ -22,5 +22,10 @@ func (TagApi) TagListView(c *gin.Context) {
 }
 
 func (TagApi) TagNameListView(c *gin.Context) {
-	// todo tag list_name api 需要查询es 找出对应tag
+	tagList, err := tagService.TagNameListService()
+	if err != nil {
+		res.FailWithMessage(err.Error(), c)
+		return
+	}
+	res.OkWithData(tagList, c)
 }

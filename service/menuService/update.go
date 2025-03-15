@@ -20,7 +20,7 @@ func UpdateMenu(menuID uint, cr req.MenuRequest) (string, error) {
 	}()
 	if _, err := menu_repo.GetMenuByID(menuID); err != nil {
 		tx.Rollback()
-		return "用户不存在", err
+		return "菜单不存在", err
 	}
 	// 清理旧关联
 	if err := menu_banner_repo.ClearByMenuID(tx, menuID); err != nil {

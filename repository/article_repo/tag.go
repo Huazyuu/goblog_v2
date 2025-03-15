@@ -89,3 +89,12 @@ func GetTagAggregations(page, limit int) ([]TagAggregation, int64, error) {
 	}
 	return aggregations, total, nil
 }
+
+type T struct {
+	DocCountErrorUpperBound int `json:"doc_count_error_upper_bound"`
+	SumOtherDocCount        int `json:"sum_other_doc_count"`
+	Buckets                 []struct {
+		Key      string `json:"key"`
+		DocCount int    `json:"doc_count"`
+	} `json:"buckets"`
+}

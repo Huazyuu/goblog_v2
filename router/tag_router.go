@@ -10,7 +10,7 @@ func (router RouterGroup) TagRouter() {
 	router.POST("tags", middleware.JwtAdmin(), tag.TagCreateView)
 
 	router.GET("tags", tag.TagListView)
-	// todo tag list_name router 需要查询es 找出对应tag
+
 	router.GET("tag_names", tag.TagNameListView)
 
 	router.PUT("tags/:id", middleware.JwtAdmin(), tag.TagUpdateView)

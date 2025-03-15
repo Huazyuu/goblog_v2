@@ -60,6 +60,15 @@ func ComList[T any](model T, option Option) (list []T, count int64, err error) {
 	count = query.Find(&list).RowsAffected
 
 	// 预加载
+	/*	type BannerModel struct {
+			MenusBanner []MenuBannerModel `gorm:"foreignKey:BannerID" json:"-"`
+		}
+		type MenuBannerModel struct {
+			BannerID int
+		}
+	*/
+	// Preload 方法里的参数名称要和结构体字段名的大小写保持一致，
+	// 也就是 "MenusBanner" 必须和 BannerModel 结构体中的 MenusBanner 字段名大小写相同
 	for _, preload := range option.Preload {
 		query = query.Preload(preload)
 	}

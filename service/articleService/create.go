@@ -5,8 +5,10 @@ import (
 	"backend/global"
 	"backend/middleware/jwt"
 	"backend/models/esmodels"
+	"backend/models/sqlmodels"
 	"backend/repository/article_repo"
 	"backend/repository/img_repo"
+	"backend/repository/tag_repo"
 	"backend/repository/user_repo"
 	"errors"
 	"fmt"
@@ -61,6 +63,16 @@ func ArticleService(cr req.ArticleRequest, claims *jwt.CustomClaims) (string, er
 	avatar, err := user_repo.GetAvatarByID(userId)
 	if err != nil {
 		return "用户不存在", errors.New("用户不存在")
+	}
+
+	for _, tag := range cr.Tags {
+		ok, _ := tag_repo.IsExistTagByTitle(tag)
+		if !ok {
+			tag_repo.CreateTag(sqlmodels.TagModel{
+				MODEL: sqlmodels.MODEL{},
+				Title: tag,
+			})
+		}
 	}
 
 	now := time.Now().Format("2006-01-02 15:04:05")

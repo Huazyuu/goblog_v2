@@ -3,6 +3,7 @@ package article_repo
 import (
 	"backend/global"
 	"backend/models/esmodels"
+	"backend/service/redisService"
 	"context"
 	"encoding/json"
 	"errors"
@@ -54,11 +55,24 @@ func GetArticleByID(id string) (article esmodels.ArticleModel, err error) {
 		return
 	}
 	article.ID = res.Id
-	// todo look digg comment count
-	// article.LookCount =article.LookCount + redis_ser.NewArticleLook().Get(res.Id)
-	// article.DiggCount =article.DiggCount + redis_ser.NewDigg().Get(res.Id)
-	// article.CommentCount =article.CommentCount + redis_ser.NewCommentCount().Get(res.Id)
+	// todo es count
+	article.LookCount += redisService.NewArticleLook().Get(res.Id)
+	article.DiggCount += redisService.NewArticleDigg().Get(res.Id)
+	article.CommentCount += redisService.NewCommentCount().Get(res.Id)
 	return article, err
+}
+
+func ISArticleExistByID(id string) (exist bool, err error) {
+	_, err = global.ESClient.
+		Get().
+		Index(esmodels.ArticleModel{}.Index()).
+		Id(id).
+		Do(context.Background())
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 func GetArticleIDListByUserID(userid uint) (articleIDList []string, err error) {
@@ -79,6 +93,30 @@ func GetArticleIDListByUserID(userid uint) (articleIDList []string, err error) {
 	}
 
 	return articleIDList, nil
+}
+
+func GetArticleListByIDList(articleIDList []any) (articleList []esmodels.ArticleModel, err error) {
+	// 传id列表，查es
+	result, err := global.ESClient.
+		Search(esmodels.ArticleModel{}.Index()).
+		Query(elastic.NewTermsQuery("_id", articleIDList...)).
+		Size(1000).
+		Do(context.Background())
+	if err != nil {
+		return
+	}
+	for _, hit := range result.Hits.Hits {
+		var article esmodels.ArticleModel
+		err = json.Unmarshal(hit.Source, &article)
+		if err != nil {
+			global.Log.Error(err)
+			continue
+		}
+		article.ID = hit.Id
+		article.Content = ""
+		articleList = append(articleList, article)
+	}
+	return articleList, nil
 }
 
 func GetArticleIDList() (articleIDList []string, err error) {
@@ -115,6 +153,9 @@ func GetArticleByKeyword(keyword string) (article esmodels.ArticleModel, err err
 		return
 	}
 	article.ID = hit.Id
+	redisService.NewArticleLook().Set(hit.Id)
+	// todo es tag update
+	article.LookCount += redisService.NewArticleLook().Get(hit.Id)
 	return
 }
 
@@ -189,7 +230,10 @@ func GetArticleList(option Option) (list []esmodels.ArticleModel, count int, err
 	count = int(res.Hits.TotalHits.Value)
 
 	// 返回值处理
-	// todo diggInfo lookInfo commentInfo
+	diggInfo := redisService.NewArticleDigg().GetAll()
+	lookInfo := redisService.NewArticleLook().GetAll()
+	commentInfo := redisService.NewCommentCount().GetAll()
+
 	for _, hit := range res.Hits.Hits {
 		var resp esmodels.ArticleModel
 		err = json.Unmarshal(hit.Source, &resp)
@@ -202,10 +246,10 @@ func GetArticleList(option Option) (list []esmodels.ArticleModel, count int, err
 			resp.Title = title[0]
 		}
 		resp.ID = hit.Id
-		// todo diggInfo lookInfo commentInfo count
-		// resp.DiggCount = resp.DiggCount + digg
-		// resp.LookCount = resp.LookCount + look
-		// resp.CommentCount = resp.CommentCount + comment
+
+		resp.DiggCount += diggInfo[hit.Id]
+		resp.LookCount += lookInfo[hit.Id]
+		resp.CommentCount += commentInfo[hit.Id]
 		list = append(list, resp)
 	}
 	return list, count, nil
@@ -223,4 +267,27 @@ func RemoveArticleByList(idlist []string) (int, error) {
 		return 0, err
 	}
 	return len(res.Succeeded()), nil
+}
+
+func GetArticleBannerID(imageIDList []any) (bannerIDList []uint, err error) {
+	res, err := global.ESClient.
+		Search(esmodels.ArticleModel{}.Index()).
+		Query(elastic.NewTermsQuery("banner_id", imageIDList...)).
+		Size(10000).
+		Do(context.Background())
+	if err != nil {
+		return
+	}
+	for _, hit := range res.Hits.Hits {
+		// 反序列化文档源数据到 ArticleModel 结构体
+		var article esmodels.ArticleModel
+		err = json.Unmarshal(hit.Source, &article)
+		if err != nil {
+			global.Log.Error("Failed to unmarshal document source:", err)
+			continue
+		}
+		// 获取 banner_id
+		bannerIDList = append(bannerIDList, article.BannerID)
+	}
+	return
 }
