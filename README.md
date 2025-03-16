@@ -1,51 +1,72 @@
 # GO BLOG
 
 ## uml图
+
 <img src="./sql/uml.png" alt="uml"/>
 
 ## 项目结构
+
 ```
-├─api # handler 层
-│  ├─adverts_api
-│  ├─images_api
-│  ├─menu_api
-│  ├─settings_api
-│  └─users_api
-├─config # 配置文件 
-├─core # 加载配置
-├─doc # swagger文档
-├─docs # 其余文档
+├─cmd # 运行文件
+├─config
+├─controller
+│  ├─api
+│  │  ├─adverts_api
+│  │  ├─article_api
+│  │  ├─images_api
+│  │  ├─menu_api
+│  │  ├─message_api
+│  │  ├─settings_api
+│  │  ├─tag_api
+│  │  └─users_api
+│  ├─req
+│  └─res
+├─core
+├─doc
+├─dump # 导出数据存放路径
+│  ├─es
+│  └─sql
 ├─flags # 命令行参数
-├─global # 全局参数 
-├─middleware #中间件
+├─global # 全局变量
+├─middleware
 │  └─jwt
-├─models # 数据定义
+├─models
 │  ├─common
 │  ├─diverseType
 │  ├─esmodels
-│  ├─req
-│  ├─res
 │  └─sqlmodels
-├─plugins # 插件
+├─plugins
 │  ├─email_plugin
-│  └─freeimg
-├─repository # 数据库操作 
+│  ├─freeimg
+│  ├─script
+│  │  └─cron
+│  └─sync
+├─repository
 │  ├─advert_repo
+│  ├─article_repo
+│  ├─collect_repo
 │  ├─img_repo
 │  ├─menu_banner_repo
 │  ├─menu_repo
+│  ├─msg_repo
+│  ├─tag_repo
 │  └─user_repo
-├─router # 路由层
-├─service # 服务层
+├─router
+├─service
 │  ├─advertsService
+│  ├─articleService
+│  ├─esService
+│  │  └─indexService
 │  ├─fileService
 │  ├─menuService
+│  ├─msgService
 │  ├─redisService
 │  ├─settingsService
+│  ├─tagService
 │  └─usersService
-├─sql # 建表语句(若不使用gorm自动迁移,可直接建表)			
-├─uploads # 上传文件存储
-└─utils	# 工具
-
+├─sql
+├─uploads
+│  └─avatar
+└─utils
 ```
 

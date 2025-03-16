@@ -83,6 +83,11 @@ func ArticleUpdateService(cr req.ArticleUpdateRequest, userid uint) (string, err
 	if err != nil {
 		return "更新失败", err
 	}
-	// todo 同步全文搜索
+	// 更新成功，同步数据到全文搜索
+	newArticle, _ := article_repo.GetArticleByID(cr.ID)
+	if article.Content != newArticle.Content || article.Title != newArticle.Title {
+		article_repo.DeleteFullTextByArticleID(cr.ID)
+		article_repo.AsyncArticleByFullText(cr.ID, article.Title, newArticle.Content)
+	}
 	return "更新文章成功", nil
 }

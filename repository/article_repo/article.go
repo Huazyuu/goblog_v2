@@ -55,7 +55,7 @@ func GetArticleByID(id string) (article esmodels.ArticleModel, err error) {
 		return
 	}
 	article.ID = res.Id
-	// todo es count
+
 	article.LookCount += redisService.NewArticleLook().Get(res.Id)
 	article.DiggCount += redisService.NewArticleDigg().Get(res.Id)
 	article.CommentCount += redisService.NewCommentCount().Get(res.Id)
@@ -154,7 +154,6 @@ func GetArticleByKeyword(keyword string) (article esmodels.ArticleModel, err err
 	}
 	article.ID = hit.Id
 	redisService.NewArticleLook().Set(hit.Id)
-	// todo es tag update
 	article.LookCount += redisService.NewArticleLook().Get(hit.Id)
 	return
 }
@@ -260,7 +259,7 @@ func RemoveArticleByList(idlist []string) (int, error) {
 	for _, id := range idlist {
 		req := elastic.NewBulkDeleteRequest().Id(id)
 		bulk.Add(req)
-		// todo 删除全文搜索
+		go DeleteFullTextByArticleID(id)
 	}
 	res, err := bulk.Do(context.Background())
 	if err != nil {

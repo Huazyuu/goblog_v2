@@ -20,7 +20,7 @@ func (ArticleApi) ArticleCreateView(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwt.CustomClaims)
 
-	msg, err := articleService.ArticleService(cr, claims)
+	msg, err := articleService.ArticleCreateService(cr, claims)
 	if err != nil {
 		global.Log.Error(err.Error())
 		res.FailWithMessage(msg, c)

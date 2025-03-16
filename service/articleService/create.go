@@ -20,7 +20,7 @@ import (
 	"time"
 )
 
-func ArticleService(cr req.ArticleRequest, claims *jwt.CustomClaims) (string, error) {
+func ArticleCreateService(cr req.ArticleRequest, claims *jwt.CustomClaims) (string, error) {
 	userId := claims.UserID
 	userNickName := claims.NickName
 
@@ -105,7 +105,7 @@ func ArticleService(cr req.ArticleRequest, claims *jwt.CustomClaims) (string, er
 		return "创建失败", errors.New("创建失败")
 	}
 
-	// todo 全文搜索 同步数据
+	go article_repo.AsyncArticleByFullText(article.ID, article.Title, article.Content)
 
 	return fmt.Sprintf("文章[%s]创建成功", cr.Title), nil
 

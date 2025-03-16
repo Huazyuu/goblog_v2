@@ -18,6 +18,7 @@ func (ArticleApi) ArticleDetailByTitleView(c *gin.Context) {
 		return
 	}
 	// keyword 和 title 一样,keyword能精准查找
+
 	model, err := article_repo.GetArticleByKeyword(cr.Title)
 	if err != nil {
 		res.FailWithMessage(err.Error(), c)
@@ -33,8 +34,9 @@ func (ArticleApi) ArticleDetailByIDView(c *gin.Context) {
 		res.FailWithCode(res.ArgumentError, c)
 		return
 	}
-	redisService.NewArticleLook().Set(cr.ID)
 	article, err := article_repo.GetArticleByID(cr.ID)
+	redisService.NewArticleLook().Set(cr.ID)
+
 	if err != nil {
 		res.FailWithMessage("没有该文章", c)
 		return

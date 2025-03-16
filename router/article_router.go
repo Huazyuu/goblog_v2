@@ -10,12 +10,15 @@ func (router RouterGroup) ArticleRouter() {
 	// 发布文章
 	router.POST("articles", middleware.JwtAuth(), article.ArticleCreateView)
 
-	// 文章内容
-	router.GET("articles/detail/:id", article.ArticleDetailByIDView)
-	// 通过title(精准查找)找出具体文章
-	router.GET("article/detail", article.ArticleDetailByTitleView)
-	// 文章详情
-	router.GET("articles/:id", article.ArticleDetailView)
+	// ES article look++
+	{
+		// 文章内容
+		router.GET("articles/detail/:id", article.ArticleDetailByIDView)
+		// 通过title(精准查找)找出具体文章
+		router.GET("article/detail", article.ArticleDetailByTitleView)
+		// 文章详情
+		router.GET("articles/:id", article.ArticleDetailView)
+	}
 
 	// 文章列表 全
 	router.GET("articles", article.ArticleListView)
