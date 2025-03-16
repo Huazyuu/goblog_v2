@@ -46,4 +46,7 @@ func (router RouterGroup) ArticleRouter() {
 	// 文章点赞
 	router.POST("articles/digg", middleware.JwtAuth(), article.ArticleDiggView)
 
+	// 全文搜索
+	router.GET("articles/text", article.FullTextSearchView) // 全文搜索
+
 }

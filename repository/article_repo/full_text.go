@@ -1,17 +1,6 @@
 package article_repo
 
-import (
-	"backend/global"
-	"backend/models/esmodels"
-	"context"
-	"github.com/PuerkitoBio/goquery"
-	"github.com/olivere/elastic/v7"
-	"github.com/russross/blackfriday"
-	"github.com/sirupsen/logrus"
-	"strings"
-)
-
-type SearchData struct {
+/*type SearchData struct {
 	Key   string `json:"key"`
 	Body  string `json:"body"`  // 正文
 	Slug  string `json:"slug"`  // 包含文章的id 的跳转地址
@@ -94,3 +83,4 @@ func getBody(body string) string {
 func getSlug(slug string) string {
 	return "#" + slug
 }
+*/

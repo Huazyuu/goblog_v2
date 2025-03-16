@@ -256,10 +256,12 @@ func GetArticleList(option Option) (list []esmodels.ArticleModel, count int, err
 
 func RemoveArticleByList(idlist []string) (int, error) {
 	bulk := global.ESClient.Bulk().Index(esmodels.ArticleModel{}.Index()).Refresh("true")
+
 	for _, id := range idlist {
 		req := elastic.NewBulkDeleteRequest().Id(id)
 		bulk.Add(req)
 		go DeleteFullTextByArticleID(id)
+
 	}
 	res, err := bulk.Do(context.Background())
 	if err != nil {

@@ -1,6 +1,8 @@
 package core
 
-import "backend/global"
+import (
+	"backend/global"
+)
 
 func InitCore() {
 	global.Config = InitConf()

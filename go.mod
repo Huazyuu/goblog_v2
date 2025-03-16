@@ -17,10 +17,13 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/liu-cn/json-filter v0.0.0-20241117044243-8d36aa69a37b
 	github.com/olivere/elastic/v7 v7.0.32
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/russross/blackfriday v1.6.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/valyala/fasthttp v1.59.0
 	github.com/xyproto/randomstring v1.0.5
+	github.com/yuin/goldmark v1.7.1
+	go.uber.org/ratelimit v0.3.1
 	golang.org/x/crypto v0.36.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/yaml.v3 v3.0.1
@@ -32,6 +35,7 @@ require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/andybalholm/cascadia v1.3.3 // indirect
+	github.com/benbjohnson/clock v1.3.0 // indirect
 	github.com/bytedance/sonic v1.12.10 // indirect
 	github.com/bytedance/sonic/loader v0.2.3 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
@@ -61,7 +65,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rakyll/statik v0.1.7 // indirect
-	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
