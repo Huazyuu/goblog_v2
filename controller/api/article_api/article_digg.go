@@ -16,7 +16,7 @@ func (ArticleApi) ArticleDiggView(c *gin.Context) {
 		res.FailWithCode(res.ArgumentError, c)
 		return
 	}
-	exist, err := article_repo.ISArticleExistByID(cr.ID)
+	exist, err := article_repo.IsExistArticleByID(cr.ID)
 	if !exist {
 		global.Log.Error(err)
 		res.FailWithMessage("没有该文章", c)

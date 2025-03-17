@@ -28,9 +28,8 @@ clean :
 
 
 gotool :
-	go fmt ./
-	go vet ./
-
+	go fmt ../
+	go vet ../
 
 swag :
 	swag init

@@ -41,13 +41,38 @@ func ISExistData(article esmodels.ArticleModel) bool {
 	return false
 }
 
+func IsExistArticleByID(id string) (bool, error) {
+	var article esmodels.ArticleModel
+	result, err := global.ESClient.
+		Get().
+		Index(article.Index()).
+		Id(id).
+		Do(context.Background())
+	if err != nil {
+		// 判断是否是文档不存在的错误
+		if elastic.IsNotFound(err) {
+			return false, nil
+		}
+		// 其他错误则返回错误信息
+		return false, err
+	}
+	// 根据查询结果判断文档是否存在
+	return result.Found, nil
+}
+
 func GetArticleByID(id string) (article esmodels.ArticleModel, err error) {
 	res, err := global.ESClient.
 		Get().
 		Index(article.Index()).
 		Id(id).
 		Do(context.Background())
+
 	if err != nil {
+		// 判断是否是文档不存在的错误
+		if elastic.IsNotFound(err) {
+			return article, errors.New("文章不存在")
+		}
+		// 其他错误则返回错误信息
 		return article, err
 	}
 	err = json.Unmarshal(res.Source, &article)
@@ -60,19 +85,6 @@ func GetArticleByID(id string) (article esmodels.ArticleModel, err error) {
 	article.DiggCount += redisService.NewArticleDigg().Get(res.Id)
 	article.CommentCount += redisService.NewCommentCount().Get(res.Id)
 	return article, err
-}
-
-func ISArticleExistByID(id string) (exist bool, err error) {
-	_, err = global.ESClient.
-		Get().
-		Index(esmodels.ArticleModel{}.Index()).
-		Id(id).
-		Do(context.Background())
-	if err != nil {
-		return false, err
-	}
-
-	return true, nil
 }
 
 func GetArticleIDListByUserID(userid uint) (articleIDList []string, err error) {
@@ -156,16 +168,6 @@ func GetArticleByKeyword(keyword string) (article esmodels.ArticleModel, err err
 	redisService.NewArticleLook().Set(hit.Id)
 	article.LookCount += redisService.NewArticleLook().Get(hit.Id)
 	return
-}
-
-func UpdateArticle(id string, data map[string]any) error {
-	_, err := global.ESClient.
-		Update().
-		Index(esmodels.ArticleModel{}.Index()).
-		Id(id).
-		Doc(data).Refresh("true").
-		Do(context.Background())
-	return err
 }
 
 func GetArticleList(option Option) (list []esmodels.ArticleModel, count int, err error) {
@@ -254,22 +256,6 @@ func GetArticleList(option Option) (list []esmodels.ArticleModel, count int, err
 	return list, count, nil
 }
 
-func RemoveArticleByList(idlist []string) (int, error) {
-	bulk := global.ESClient.Bulk().Index(esmodels.ArticleModel{}.Index()).Refresh("true")
-
-	for _, id := range idlist {
-		req := elastic.NewBulkDeleteRequest().Id(id)
-		bulk.Add(req)
-		go DeleteFullTextByArticleID(id)
-
-	}
-	res, err := bulk.Do(context.Background())
-	if err != nil {
-		return 0, err
-	}
-	return len(res.Succeeded()), nil
-}
-
 func GetArticleBannerID(imageIDList []any) (bannerIDList []uint, err error) {
 	res, err := global.ESClient.
 		Search(esmodels.ArticleModel{}.Index()).
@@ -291,4 +277,30 @@ func GetArticleBannerID(imageIDList []any) (bannerIDList []uint, err error) {
 		bannerIDList = append(bannerIDList, article.BannerID)
 	}
 	return
+}
+
+func UpdateArticle(id string, data map[string]any) error {
+	_, err := global.ESClient.
+		Update().
+		Index(esmodels.ArticleModel{}.Index()).
+		Id(id).
+		Doc(data).Refresh("true").
+		Do(context.Background())
+	return err
+}
+
+func RemoveArticleByList(idlist []string) (int, error) {
+	bulk := global.ESClient.Bulk().Index(esmodels.ArticleModel{}.Index()).Refresh("true")
+
+	for _, id := range idlist {
+		req := elastic.NewBulkDeleteRequest().Id(id)
+		bulk.Add(req)
+		go DeleteFullTextByArticleID(id)
+
+	}
+	res, err := bulk.Do(context.Background())
+	if err != nil {
+		return 0, err
+	}
+	return len(res.Succeeded()), nil
 }

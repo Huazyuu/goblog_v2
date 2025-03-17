@@ -3,6 +3,7 @@ package api
 import (
 	"backend/controller/api/adverts_api"
 	"backend/controller/api/article_api"
+	"backend/controller/api/comment_api"
 	"backend/controller/api/images_api"
 	"backend/controller/api/menu_api"
 	"backend/controller/api/message_api"
@@ -20,6 +21,7 @@ type ApiGroup struct {
 	TagApi      tag_api.TagApi
 	MessageApi  message_api.MessageApi
 	ArticleApi  article_api.ArticleApi
+	CommentApi  comment_api.CommentApi
 }
 
 var ApiGroupApp = new(ApiGroup)
