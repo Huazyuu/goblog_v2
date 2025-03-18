@@ -3,6 +3,7 @@ package flags
 import (
 	"backend/global"
 	"backend/models/sqlmodels"
+	"backend/plugins/logStash"
 )
 
 func dbCreate() {
@@ -23,6 +24,7 @@ func dbCreate() {
 			&sqlmodels.LoginDataModel{},
 			&sqlmodels.ChatModel{},
 			&sqlmodels.FeedbackModel{},
+			&logStash.LogModel{},
 		)
 	if err != nil {
 		global.Log.Error("[ error ] 生成数据库表结构失败")

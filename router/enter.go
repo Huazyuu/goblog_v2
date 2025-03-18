@@ -2,6 +2,7 @@ package router
 
 import (
 	"backend/global"
+	"backend/middleware"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -13,8 +14,8 @@ type RouterGroup struct {
 func InitRouter() *gin.Engine {
 	gin.SetMode(global.Config.System.Env)
 	router := gin.Default()
-	// todo log middleware
-	// router.Use(middleware.LogMiddleWare())
+	// router.Use(middleware.InitActionMiddleware())
+	router.Use(middleware.LogMiddleWare())
 	/*
 		将 uploads 目录中的文件映射到一个特定的 URL 路径
 		具体来说，它会将以 /uploads 开头的 HTTP 请求映射到本地文件系统中的 uploads 目录

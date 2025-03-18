@@ -20,13 +20,12 @@ func JwtAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		parts := strings.SplitN(authHeader, " ", 2)
-		if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
+		tokenString := SplitToken(authHeader)
+		if tokenString == "" {
 			res.FailWithMessage("token格式错误", c)
 			c.Abort()
 			return
 		}
-		tokenString := parts[1]
 		claims, err := jwt.ParseToken(tokenString)
 		if err != nil {
 			global.Log.Errorf("JWT 解析错误: %v", err)
@@ -52,13 +51,12 @@ func JwtAdmin() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		parts := strings.SplitN(authHeader, " ", 2)
-		if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
+		tokenString := SplitToken(authHeader)
+		if tokenString == "" {
 			res.FailWithMessage("token格式错误", c)
 			c.Abort()
 			return
 		}
-		tokenString := parts[1]
 		claims, err := jwt.ParseToken(tokenString)
 		if err != nil {
 			global.Log.Errorf("JWT 解析错误: %v", err)
@@ -93,13 +91,12 @@ func JwtParamsAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		parts := strings.SplitN(authHeader, " ", 2)
-		if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
+		tokenString := SplitToken(authHeader)
+		if tokenString == "" {
 			res.FailWithMessage("token格式错误", c)
 			c.Abort()
 			return
 		}
-		tokenString := parts[1]
 		claims, err := jwt.ParseToken(tokenString)
 		if err != nil {
 			global.Log.Errorf("JWT 解析错误: %v", err)
@@ -116,4 +113,17 @@ func JwtParamsAuth() gin.HandlerFunc {
 		c.Set("claims", claims)
 		c.Next()
 	}
+}
+
+// SplitToken Authorization:bearer xxx.xxx.xxx
+func SplitToken(token string) string {
+	if token == "" {
+		return ""
+	}
+	parts := strings.SplitN(token, " ", 2)
+	if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
+		return ""
+	}
+	tokenString := parts[1]
+	return tokenString
 }

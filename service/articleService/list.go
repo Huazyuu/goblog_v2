@@ -2,18 +2,18 @@ package articleService
 
 import (
 	"backend/controller/req"
+	"backend/controller/res"
 	"backend/global"
+	"backend/middleware"
 	"backend/middleware/jwt"
 	"backend/models/esmodels"
 	"backend/repository/article_repo"
 	"backend/service/redisService"
 	"context"
 	"encoding/json"
-	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/liu-cn/json-filter/filter"
 	"github.com/olivere/elastic/v7"
-	"strings"
 	"time"
 )
 
@@ -22,11 +22,11 @@ func ArticleListService(c *gin.Context, cr req.ArticleSearchRequest) (list []esm
 	boolSearch := elastic.NewBoolQuery()
 	if cr.IsUser {
 		authHeader := c.GetHeader("Authorization")
-		parts := strings.SplitN(authHeader, " ", 2)
-		if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
-			return list, "token格式错误 应该 Authorization:bearer xxx.xxx.xxx ", errors.New("token格式错误")
+		tokenString := middleware.SplitToken(authHeader)
+		if tokenString == "" {
+			res.FailWithMessage("token格式错误", c)
+			return
 		}
-		tokenString := parts[1]
 		claims, err := jwt.ParseToken(tokenString)
 		if err == nil && !redisService.CheckLogout(tokenString) {
 			boolSearch.Must(elastic.NewTermsQuery("user_id", claims.UserID))

@@ -2,13 +2,14 @@ package articleService
 
 import (
 	"backend/controller/req"
+	"backend/controller/res"
+	"backend/middleware"
 	"backend/middleware/jwt"
 	"backend/models/esmodels"
 	"backend/repository/article_repo"
 	"backend/repository/collect_repo"
 	"backend/service/redisService"
 	"github.com/gin-gonic/gin"
-	"strings"
 )
 
 type ArticleItem struct {
@@ -81,12 +82,9 @@ func ArticleDetailService(c *gin.Context, articleID string) (ArticleDetailRespon
 func isUserArticleColl(c *gin.Context, articleID string) (isCollect bool) {
 	// 判断用户是否正常登录
 	authHeader := c.GetHeader("Authorization")
-	parts := strings.SplitN(authHeader, " ", 2)
-	if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
-		return
-	}
-	tokenString := parts[1]
+	tokenString := middleware.SplitToken(authHeader)
 	if tokenString == "" {
+		res.FailWithMessage("token格式错误", c)
 		return
 	}
 	claims, err := jwt.ParseToken(tokenString)
