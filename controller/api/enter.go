@@ -7,6 +7,7 @@ import (
 	"backend/controller/api/images_api"
 	"backend/controller/api/menu_api"
 	"backend/controller/api/message_api"
+	"backend/controller/api/news_api"
 	"backend/controller/api/settings_api"
 	"backend/controller/api/tag_api"
 	"backend/controller/api/users_api"
@@ -22,6 +23,7 @@ type ApiGroup struct {
 	MessageApi  message_api.MessageApi
 	ArticleApi  article_api.ArticleApi
 	CommentApi  comment_api.CommentApi
+	NewsApi     news_api.NewsApi
 }
 
 var ApiGroupApp = new(ApiGroup)

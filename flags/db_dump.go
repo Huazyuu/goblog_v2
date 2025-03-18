@@ -12,7 +12,7 @@ import (
 func dbDump() {
 	mysql := global.Config.Mysql
 	timer := time.Now().Format("20060102")
-	sqlPath := fmt.Sprintf("../dump/sql/%s_%s.sql", mysql.DB, timer)
+	sqlPath := fmt.Sprintf("./dump/sql/%s_%s.sql", mysql.DB, timer)
 
 	// 调用系统命令，执行 mysqldump 进行数据库导出，添加 -P 选项指定端口号
 	fmt.Println(fmt.Sprintf("mysqldump -u%s -p%s -P%d -h%s --column-statistics=0 %s > %s", mysql.User, mysql.Password, mysql.Port, mysql.Host, mysql.DB, sqlPath))

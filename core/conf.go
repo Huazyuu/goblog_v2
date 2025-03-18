@@ -11,7 +11,7 @@ import (
 
 func InitConf() *config.Config {
 	c := &config.Config{}
-	confPath := "../settings.yaml"
+	confPath := "settings.yaml"
 	yamlConf, err := os.ReadFile(confPath)
 	if err != nil {
 		panic(fmt.Errorf("get yamlConf error: %s", err))

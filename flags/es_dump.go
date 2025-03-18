@@ -54,7 +54,7 @@ func esDumpServer(index, mapping string) {
 		Data:    dataList,
 	}
 
-	fileName := fmt.Sprintf("../dump/es/%s_%s.json", index, time.Now().Format("20060102"))
+	fileName := fmt.Sprintf("./dump/es/%s_%s.json", index, time.Now().Format("20060102"))
 	file, _ := os.Create(fileName)
 
 	byteData, _ := json.Marshal(response)

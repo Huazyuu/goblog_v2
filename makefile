@@ -7,7 +7,7 @@
         escreate esload esdump \
         help
 
-BINARY="../build/yublog"
+BINARY="./build/yublog"
 
 build :
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${BINARY}.exe
@@ -28,8 +28,8 @@ clean :
 
 
 gotool :
-	go fmt ../
-	go vet ../
+	go fmt 
+	go vet 
 
 swag :
 	swag init
