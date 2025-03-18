@@ -1,6 +1,8 @@
 package sqlmodels
 
-import "backend/models/diverseType"
+import (
+	"backend/models/diverseType"
+)
 
 type ChatModel struct {
 	MODEL    `json:","`

@@ -4,6 +4,7 @@ import (
 	"backend/global"
 	"backend/middleware/jwt"
 	"backend/models/sqlmodels"
+	"backend/repository/loginData_repo"
 	"backend/repository/user_repo"
 	"backend/utils"
 	"errors"
@@ -32,13 +33,16 @@ func UserLogin(c *gin.Context, username, password string) (string, error) {
 	c.Request.Header.Set("Authorization", "bearer "+token)
 
 	global.Log.Info(userModel)
-	loginData := sqlmodels.LoginDataModel{
-		UserID:   userModel.ID,
-		IP:       c.ClientIP(),
-		NickName: userModel.UserName,
-		Token:    token,
-	}
-	err = loginData.CreateLoginData()
+	ip, addr := utils.GetAddrByGin(c)
+	err = loginData_repo.CreateLoginData(sqlmodels.LoginDataModel{
+		UserID:    userModel.ID,
+		IP:        ip,
+		NickName:  userModel.UserName,
+		Token:     token,
+		Addr:      addr,
+		LoginType: 0,
+		Device:    "",
+	})
 	if err != nil {
 		return "", err
 	}

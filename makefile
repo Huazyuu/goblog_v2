@@ -5,6 +5,7 @@
         air-init air-run \
         dbcreate dbload dbdump \
         escreate esload esdump \
+        avatar \
         help
 
 BINARY="./build/yublog"
@@ -62,6 +63,8 @@ esload :
 esdump:
 	go run main.go -esdump
 
+avatar:	
+	go run main.go -avatar
 
 help :
 	@echo "make build - Compile the Go code for Windows and generate the binary"

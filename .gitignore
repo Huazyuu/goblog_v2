@@ -3,6 +3,8 @@ log/myLog.log
 tmp
 testdata
 uploads/file
+uploads/avatar  
+uploads/chat_avatar  
 settings.yaml
 
 # VSCode settings

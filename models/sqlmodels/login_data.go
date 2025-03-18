@@ -1,7 +1,6 @@
 package sqlmodels
 
 import (
-	"backend/global"
 	"backend/models/diverseType"
 )
 
@@ -20,18 +19,4 @@ type LoginDataModel struct {
 
 func (LoginDataModel) TableName() string {
 	return "login_data"
-}
-
-/*============ database functions  ============*/
-
-func (l LoginDataModel) CreateLoginData() error {
-	return global.DB.Create(&LoginDataModel{
-		UserID:    l.UserID,
-		IP:        l.IP,
-		NickName:  l.NickName,
-		Token:     l.Token,
-		Device:    l.Device,
-		Addr:      "内网地址",
-		LoginType: diverseType.SignEmail,
-	}).Error
 }

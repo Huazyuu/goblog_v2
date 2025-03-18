@@ -10,6 +10,8 @@ type Option struct {
 	EsCreate bool   // 创建索引
 	ESDump   bool   // 导出es索引
 	ESLoad   string // 导入es索引
+
+	AvatarCreate bool
 }
 
 // Parse 解析命令行参数
@@ -22,6 +24,9 @@ func Parse() (option *Option) {
 	flag.BoolVar(&option.EsCreate, "escreate", false, "创建索引")
 	flag.StringVar(&option.ESLoad, "esload", "", "导入es索引")
 	flag.BoolVar(&option.ESDump, "esdump", false, "导出es索引")
+
+	flag.BoolVar(&option.AvatarCreate, "avatar", false, "生成头像")
+
 	flag.Parse()
 	return option
 }
@@ -41,7 +46,9 @@ func (option Option) Run() bool {
 	case option.ESDump:
 		esDump()
 		return true
-
+	case option.AvatarCreate:
+		avatarCreate()
+		return true
 	}
 
 	return false

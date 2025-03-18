@@ -19,7 +19,7 @@ func UserRegister(username, nickname, password string, role diverseType.Role, em
 	user.Avatar = "/uploads/avatar/default.png"
 	user.Email = email
 	user.IP = ip
-	user.Addr = "内网地址"
+	user.Addr = utils.GetAddr(ip)
 
 	err = user_repo.CreateUser(user)
 	if err != nil {
