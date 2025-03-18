@@ -92,7 +92,7 @@ func sendRequest(api string, query url.Values, headers map[string]interface{}) (
 	req, _ := http.NewRequest("GET", api+"?"+query.Encode(), nil)
 
 	// 设置固定请求头
-	req.Host = "api.code life.cc"
+	req.Host = "api.codelife.cc"
 	for k, v := range map[string]string{
 		"Accept":     "*/*",
 		"Connection": "keep-alive",
