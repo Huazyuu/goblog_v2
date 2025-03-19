@@ -5,6 +5,8 @@ import (
 	"backend/controller/res"
 	"backend/global"
 	"backend/middleware/jwt"
+	"backend/plugins/logStash"
+	"fmt"
 
 	"backend/service/usersService"
 	"github.com/gin-gonic/gin"
@@ -12,18 +14,24 @@ import (
 
 // UserUpdateRoleView 管理员修改用户权限 昵称
 func (UsersApi) UserUpdateRoleView(c *gin.Context) {
+	title := "修改权限"
+	log := logStash.NewAction(c)
+
 	var cr req.UserRoleRequest
 	if err := c.ShouldBindJSON(&cr); err != nil {
+		log.ErrItem(title, "参数绑定错误", err.Error())
 		res.FailWithError(err, &cr, c)
 		return
 	}
 	info, err := usersService.UserUpdateRole(cr)
 	if err != nil {
+		log.ErrItem(title, "服务错误", err.Error())
 		global.Log.Error(err)
 		res.FailWithMessage(info, c)
 		return
 	}
 	res.FailWithMessage(info, c)
+	log.InfoItem(title, "修改成功", fmt.Sprintf("修改用户id:%s权限为:%s", cr.NickName, cr.Role.String()))
 }
 
 // UserUpdatePasswordView 修改密码

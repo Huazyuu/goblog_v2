@@ -9,6 +9,7 @@ import (
 
 func (SettingsApi) SettingsInfoView(c *gin.Context) {
 	var cr req.SettingsUriRequest
+
 	err := c.ShouldBindUri(&cr)
 	if err != nil {
 		res.FailWithCode(res.ArgumentError, c)
@@ -18,6 +19,6 @@ func (SettingsApi) SettingsInfoView(c *gin.Context) {
 	if ok {
 		res.OkWithData(info, c)
 	} else {
-		res.FailWithMessage("info", c)
+		res.FailWithMessage(info.(string), c)
 	}
 }

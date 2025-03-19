@@ -14,8 +14,8 @@ func (router RouterGroup) ImagesRouter() {
 	router.GET("images", imagesApi.ImageListView)
 	router.GET("image_names", imagesApi.ImageNameListView)
 
-	router.PUT("images", middleware.JwtAuth(), imagesApi.ImageUpdateView)
+	router.PUT("images", middleware.JwtAdmin(), imagesApi.ImageUpdateView)
 
-	router.DELETE("images", middleware.JwtAuth(), imagesApi.ImageRemoveView)
+	router.DELETE("images", middleware.JwtAdmin(), imagesApi.ImageRemoveView)
 
 }

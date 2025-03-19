@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"backend/global"
 	"backend/plugins/logStash"
 	"bytes"
 	"github.com/gin-gonic/gin"
@@ -25,19 +24,28 @@ func LogMiddleWare() gin.HandlerFunc {
 			byteData:       bytes.NewBuffer([]byte{}),
 		}
 		c.Writer = r
-		c.Next()
-		// 响应
-		_action, ok := c.Get("action")
-		if !ok {
-			global.Log.Info("no action")
-			return
+
+		// 判断是否为图片上传请求
+		contentType := c.GetHeader("Content-Type")
+		isImageUpload := contentType == "multipart/form-data"
+
+		if !isImageUpload {
+			c.Next()
+			// 响应
+			_action, ok := c.Get("action")
+			if !ok {
+				return
+			}
+			action, ok := _action.(*logStash.Action)
+			if !ok {
+				return
+			}
+			action.SetResponseContent(r.byteData.String())
+			action.SetFlush()
+		} else {
+			// 如果是图片上传请求，直接调用后续中间件和处理函数，不记录日志
+			c.Next()
 		}
-		action, ok := _action.(*logStash.Action)
-		if !ok {
-			return
-		}
-		action.SetResponseContent(r.byteData.String())
-		action.SetFlush()
 	}
 }
 

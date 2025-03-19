@@ -30,7 +30,7 @@ type Action struct {
 }
 
 // NewAction 构造函数
-func NewAction(c *gin.Context) Action {
+func NewAction(c *gin.Context) *Action {
 	action := Action{
 		ip:       c.ClientIP(),
 		addr:     getAddr(c.ClientIP()),
@@ -39,8 +39,25 @@ func NewAction(c *gin.Context) Action {
 		token:    splitToken(c.GetHeader("Authorization")),
 	}
 	action.setResponse(c)
-	return action
+	return &action
 }
+
+/*=============二次封装 简化消息================*/
+
+func (a *Action) InfoItem(title string, label string, value interface{}) {
+	a.Info(title)
+	a.setItem(label, value, diverseType.Info)
+}
+func (a *Action) WarnItem(title string, label string, value interface{}) {
+	a.Warn(title)
+	a.setItem(label, value, diverseType.Warning)
+}
+func (a *Action) ErrItem(title string, label string, value interface{}) {
+	a.Error(title)
+	a.setItem(label, value, diverseType.Error)
+}
+
+/*================ 设置消息 =================*/
 
 // SetItemInfo 设置信息级日志项
 func (a *Action) SetItemInfo(label string, value interface{}) {
@@ -69,9 +86,7 @@ func (a *Action) SetImage(url string) {
 
 // SetUrl 添加链接日志项
 func (a *Action) SetUrl(title, url string) {
-	a.itemList = append(a.itemList, fmt.Sprintf(`<div class="log_link">
-															<a target="_blank" href="%s">%s</a>
-														</div>`,
+	a.itemList = append(a.itemList, fmt.Sprintf(`<div class="log_link"><a target="_blank" href="%s">%s</a></div>`,
 		url, title))
 }
 
@@ -84,12 +99,14 @@ func (a *Action) SetUpload(c *gin.Context) {
 	}
 	for key, headers := range forms.File {
 		file := headers[0]
-		item := fmt.Sprintf(`
-		<div class="log_upload">
-			<span>%s</span>
-			<span>%s</span>
-			<span>%d bytes</span>
-		</div>`, key, file.Filename, file.Size)
+		item := fmt.Sprintf(
+			`<div class="log_upload">
+        <div class="log_upload_head">
+            <span class="log_upload_file_key">%s</span>
+            <span class="log_upload_file_name">%s</span>
+            <span class="log_upload__file_size">%s</span>
+        </div>
+    </div>`, key, file.Filename, formatBytes(file.Size))
 		a.itemList = append(a.itemList, item)
 	}
 }
@@ -101,11 +118,16 @@ func (a *Action) SetRequest(c *gin.Context) {
 	body, _ := io.ReadAll(c.Request.Body)
 	c.Request.Body = io.NopCloser(bytes.NewBuffer(body)) // 重置请求体
 
-	requestLog := fmt.Sprintf(`
-	<div class="log_request">
-		<span>%s %s</span>
-		<pre>%s</pre>
-	</div>`, method, path, string(body))
+	requestLog := fmt.Sprintf(
+		`<div class="log_request">
+	<div class="log_request_head">
+		<span class="log_request_method %s">%s</span>
+		<span class="log_request_path">%s</span>
+	</div>
+	<div class="log_request_body">
+		<pre class="log_json_body">%s</pre>
+	</div>
+</div>`, strings.ToLower(method), method, path, string(body))
 	a.itemList = append(a.itemList, requestLog)
 }
 
@@ -113,10 +135,12 @@ func (a *Action) SetRequest(c *gin.Context) {
 func (a *Action) SetRequestHeader(c *gin.Context) {
 	header := c.Request.Header.Clone()
 	jsonData, _ := json.Marshal(header)
-	a.itemList = append(a.itemList, fmt.Sprintf(`
-	<div class="log_request_header">
-		<pre>%s</pre>
-	</div>`, string(jsonData)))
+	a.itemList = append(a.itemList, fmt.Sprintf(
+		`<div class="log_request_header">
+	<div class="log_request_body">
+		<pre class="log_json_body">%s</pre>
+	</div>
+</div>`, string(jsonData)))
 }
 
 // SetResponseContent 记录响应内容
@@ -130,21 +154,18 @@ func (a *Action) SetResponseContent(response string) {
 func (a *Action) Info(title string) {
 	a.level = diverseType.Info
 	a.title = title
-	a.save()
 }
 
 // Warn 记录警告级日志
 func (a *Action) Warn(title string) {
 	a.level = diverseType.Warning
 	a.title = title
-	a.save()
 }
 
 // Error 记录错误级日志
 func (a *Action) Error(title string) {
 	a.level = diverseType.Error
 	a.title = title
-	a.save()
 }
 
 // SetFlush 更新日志记录（追加内容）
@@ -182,15 +203,11 @@ func (a *Action) save() {
 		}
 		// 如果不对content进行置空，那么content会重复
 		a.itemList = []string{}
-		return
 	} else {
 		a.model.Level = a.level
 		a.model.Title = a.title
 		a.model.Content = a.model.Content + "\n" + content
 	}
-
-	global.Log.Info("------------------", a.model.Type)
-
 	rs := redisService.NewRedisStore(global.Redis, global.DB)
 	if err := rs.AddLog(a.model); err != nil {
 		global.Log.Error("日志写入Redis失败",
@@ -209,21 +226,16 @@ func (a *Action) setItem(label string, value interface{}, level diverseType.LogL
 	switch v.Kind() {
 	case reflect.Struct, reflect.Map, reflect.Slice:
 		// 复杂类型转JSON并格式化输出
-		jsonData, _ := json.MarshalIndent(value, "", "  ")
-		item := fmt.Sprintf(`
-			<div class="log_item %s">
-				<div class="log_item_label">%s</div>
-				<div class="log_item_content">%s</div>
-			</div>`,
+		jsonData, err := json.MarshalIndent(value, "", "  ")
+		if err != nil {
+			global.Log.Error(err.Error())
+		}
+		item := fmt.Sprintf(`<div class="log_item %s"><div class="log_item_label">%s</div><div class="log_item_content">%s</div></div>`,
 			level.String(), label, string(jsonData))
 		a.itemList = append(a.itemList, item)
 	default:
 		// 基础类型直接格式化
-		item := fmt.Sprintf(`
-		<div class="log_item %s">
-			<div class="log_item_label">%s</div>
-			<div class="log_item_content">%v</div>
-		</div>`, level.String(), label, value)
+		item := fmt.Sprintf("<div class=\"log_item %s\"><div class=\"log_item_label\">%s</div><div class=\"log_item_content\">%v</div></div>", level.String(), label, value)
 		a.itemList = append(a.itemList, item)
 	}
 }

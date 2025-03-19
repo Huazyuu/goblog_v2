@@ -4,7 +4,7 @@ import (
 	"backend/controller/res"
 	"backend/global"
 	"backend/middleware/jwt"
-
+	"backend/plugins/logStash"
 	"backend/service/fileService"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -13,6 +13,10 @@ import (
 
 // ImageUploadView 单文件上传
 func (ImagesApi) ImageUploadView(c *gin.Context) {
+	title := "上传图片"
+	log := logStash.NewAction(c)
+	log.Info(title)
+	log.SetRequestHeader(c)
 	handleUpload(c, func(c *gin.Context, claims *jwt.CustomClaims) interface{} {
 		return singleFileUpload(c, claims)
 	})
@@ -20,6 +24,10 @@ func (ImagesApi) ImageUploadView(c *gin.Context) {
 
 // ImagesUploadView 多文件上传
 func (ImagesApi) ImagesUploadView(c *gin.Context) {
+	title := "上传图片"
+	log := logStash.NewAction(c)
+	log.Info(title)
+	log.SetRequestHeader(c)
 	handleUpload(c, func(c *gin.Context, claims *jwt.CustomClaims) interface{} {
 		return multipleFilesUpload(c, claims)
 	})
@@ -27,6 +35,10 @@ func (ImagesApi) ImagesUploadView(c *gin.Context) {
 
 // FreeImagesUploadView 免费图床上传
 func (ImagesApi) FreeImagesUploadView(c *gin.Context) {
+	title := "上传图片"
+	log := logStash.NewAction(c)
+	log.Info(title)
+	log.SetRequestHeader(c)
 	handleUpload(c, func(c *gin.Context, claims *jwt.CustomClaims) interface{} {
 		return freeImageUpload(c, claims)
 	})
