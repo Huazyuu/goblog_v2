@@ -61,8 +61,16 @@ func exitGracefully(srv *http.Server) {
 	} else {
 		global.Log.Info("es数据同步完成")
 	}
-	global.Log.Info("开始同步文章数据到Mysql...")
+
+	global.Log.Info("开始同步评论数据到Mysql...")
 	if err := sync.SyncCommentData(syncCtx); err != nil {
+		global.Log.Errorf("mysql数据同步失败: %v", err)
+	} else {
+		global.Log.Info("mysql数据同步完成")
+	}
+
+	global.Log.Info("开始同步log数据到Mysql...")
+	if err := sync.SyncLogs(); err != nil {
 		global.Log.Errorf("mysql数据同步失败: %v", err)
 	} else {
 		global.Log.Info("mysql数据同步完成")

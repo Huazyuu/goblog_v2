@@ -19,7 +19,6 @@ func (UsersApi) UserLogoutView(c *gin.Context) {
 
 	log := logStash.NewAction(c)
 	log.SetRequestHeader(c)
-	log.SetResponse(c)
 
 	if err != nil {
 		global.Log.Error(err)
@@ -27,6 +26,7 @@ func (UsersApi) UserLogoutView(c *gin.Context) {
 		return
 	}
 	log.Info(fmt.Sprintf("用户 %s 注销登录", claims.Username))
+
 	global.Log.Info(fmt.Sprintf("用户 %s 注销登录", claims.Username))
 	res.OkWithMessage("注销成功", c)
 }

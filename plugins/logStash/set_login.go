@@ -2,6 +2,8 @@ package logStash
 
 import (
 	"backend/global"
+	"backend/models/diverseType"
+	"backend/models/sqlmodels"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,7 +23,7 @@ func NewFailLogin(title, userName, pwd string, c *gin.Context) {
 func saveLoginLog(title string, content string, userID uint, userName string, status bool, c *gin.Context) {
 	ip := c.ClientIP()
 	addr := getAddr(ip)
-	global.DB.Create(&LogModel{
+	global.DB.Create(&sqlmodels.LogModel{
 		IP:       ip,
 		Addr:     addr,
 		Title:    title,
@@ -29,6 +31,6 @@ func saveLoginLog(title string, content string, userID uint, userName string, st
 		UserID:   userID,
 		UserName: userName,
 		Status:   status,
-		Type:     LoginType,
+		Type:     diverseType.LoginType,
 	})
 }
