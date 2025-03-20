@@ -6,6 +6,7 @@ import (
 	"backend/controller/api/chat_api"
 	"backend/controller/api/comment_api"
 	"backend/controller/api/images_api"
+	"backend/controller/api/log_api"
 	"backend/controller/api/menu_api"
 	"backend/controller/api/message_api"
 	"backend/controller/api/news_api"
@@ -26,6 +27,7 @@ type ApiGroup struct {
 	CommentApi  comment_api.CommentApi
 	NewsApi     news_api.NewsApi
 	ChatApi     chat_api.ChatApi
+	LogApi      log_api.LogApi
 }
 
 var ApiGroupApp = new(ApiGroup)
