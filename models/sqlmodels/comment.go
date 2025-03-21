@@ -16,5 +16,3 @@ type CommentModel struct {
 func (CommentModel) TableName() string {
 	return "comment"
 }
-
-// todo comment delete logic
