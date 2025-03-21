@@ -3,6 +3,7 @@ package articleService
 import (
 	"backend/controller/req"
 	"backend/controller/res"
+	"backend/controller/resp"
 	"backend/global"
 	"backend/middleware"
 	"backend/middleware/jwt"
@@ -63,12 +64,7 @@ func ArticleListService(c *gin.Context, cr req.ArticleSearchRequest) (list []esm
 	return list, "查询成功", err
 }
 
-type CategoryResponse struct {
-	Category string `json:"category"`
-	Count    int    `json:"count"`
-}
-
-func ArticleCategoryListService() ([]CategoryResponse, string, error) {
+func ArticleCategoryListService() ([]resp.ArticleCategoryResponse, string, error) {
 	type termAggResult struct {
 		DocCountErrorUpperBound int `json:"doc_count_error_upper_bound"`
 		SumOtherDocCount        int `json:"sum_other_doc_count"`
@@ -87,11 +83,11 @@ func ArticleCategoryListService() ([]CategoryResponse, string, error) {
 	}
 
 	byteData := res.Aggregations["categories"]
-	var resp termAggResult
-	_ = json.Unmarshal(byteData, &resp)
-	var respList = make([]CategoryResponse, 0)
-	for _, bucket := range resp.Buckets {
-		respList = append(respList, CategoryResponse{
+	var result termAggResult
+	_ = json.Unmarshal(byteData, &result)
+	var respList = make([]resp.ArticleCategoryResponse, 0)
+	for _, bucket := range result.Buckets {
+		respList = append(respList, resp.ArticleCategoryResponse{
 			Category: bucket.Key,
 			Count:    bucket.DocCount,
 		})

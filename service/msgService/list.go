@@ -2,6 +2,7 @@ package msgService
 
 import (
 	"backend/controller/req"
+	"backend/controller/resp"
 
 	"backend/models/sqlmodels"
 	"backend/repository/msg_repo"
@@ -18,7 +19,7 @@ func MsgAllList(cr req.PageInfo) ([]sqlmodels.MessageModel, int64, error) {
 	return list, cnt, nil
 }
 
-func MessageUserList(cr req.MessageUserListRequest) ([]MessageUserListResponse, int64, error) {
+func MessageUserList(cr req.MessageUserListRequest) ([]resp.MessageUserListResponse, int64, error) {
 	// 获取总数
 	total, err := msg_repo.CountMessageUsers(cr.NickName)
 	if err != nil {
@@ -45,13 +46,13 @@ func MessageUserList(cr req.MessageUserListRequest) ([]MessageUserListResponse, 
 		userMap[user.ID] = user
 	}
 	// 组装响应
-	result := make([]MessageUserListResponse, 0, len(stats))
+	result := make([]resp.MessageUserListResponse, 0, len(stats))
 	for _, stat := range stats {
 		user, exists := userMap[stat.SendUserID]
 		if !exists {
 			continue
 		}
-		result = append(result, MessageUserListResponse{
+		result = append(result, resp.MessageUserListResponse{
 			UserName: user.UserName,
 			NickName: user.NickName,
 			UserID:   user.ID,
@@ -64,7 +65,7 @@ func MessageUserList(cr req.MessageUserListRequest) ([]MessageUserListResponse, 
 }
 
 // MessageUserListByUser 获取某个用户的聊天列表，包含与该用户有聊天记录的其他用户信息以及他们之间的消息数量
-func MessageUserListByUser(userID uint) ([]MessageUserListResponse, error) {
+func MessageUserListByUser(userID uint) ([]resp.MessageUserListResponse, error) {
 	// 获取统计信息
 	stats, err := msg_repo.GetUserMessageStats(userID)
 	if err != nil {
@@ -98,13 +99,13 @@ func MessageUserListByUser(userID uint) ([]MessageUserListResponse, error) {
 		userMap[user.ID] = user
 	}
 
-	result := make([]MessageUserListResponse, 0, len(userCounts))
+	result := make([]resp.MessageUserListResponse, 0, len(userCounts))
 	for uid, count := range userCounts {
 		user, exists := userMap[uid]
 		if !exists {
 			continue
 		}
-		result = append(result, MessageUserListResponse{
+		result = append(result, resp.MessageUserListResponse{
 			UserName: user.UserName,
 			NickName: user.NickName,
 			UserID:   user.ID,

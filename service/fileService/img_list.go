@@ -2,17 +2,12 @@ package fileService
 
 import (
 	"backend/controller/req"
+	"backend/controller/resp"
 	"backend/models/sqlmodels"
 	"backend/repository/article_repo"
 )
 
-type ImageListResponse struct {
-	sqlmodels.BannerModel
-	BannerCount  int `json:"bannerCount"`  // 关联banner的个数
-	ArticleCount int `json:"articleCount"` // 关联文章的个数
-}
-
-func ImageListService(cr req.PageInfo) ([]ImageListResponse, error) {
+func ImageListService(cr req.PageInfo) ([]resp.ImageListResponse, error) {
 	imageList, _, err := req.ComList(sqlmodels.BannerModel{}, req.Option{
 		PageInfo: cr,
 		Debug:    true,
@@ -43,9 +38,9 @@ func ImageListService(cr req.PageInfo) ([]ImageListResponse, error) {
 		}
 	}
 
-	var list = make([]ImageListResponse, 0)
+	var list = make([]resp.ImageListResponse, 0)
 	for _, model := range imageList {
-		list = append(list, ImageListResponse{
+		list = append(list, resp.ImageListResponse{
 			BannerModel:  model,
 			BannerCount:  len(model.MenusBanner),
 			ArticleCount: imageIDArticleCountMap[model.ID],

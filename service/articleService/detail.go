@@ -3,6 +3,7 @@ package articleService
 import (
 	"backend/controller/req"
 	"backend/controller/res"
+	"backend/controller/resp"
 	"backend/middleware"
 	"backend/middleware/jwt"
 	"backend/models/esmodels"
@@ -12,28 +13,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ArticleItem struct {
-	ID    string `json:"id"`
-	Title string `json:"title"`
-}
-type ArticleDetailResponse struct {
-	esmodels.ArticleModel
-	IsCollect bool         `json:"is_collect"` // 用户是否收藏文章
-	Next      *ArticleItem `json:"next"`       // 上一篇文章
-	Prev      *ArticleItem `json:"prev"`       // 下一篇文章
-}
-
-func ArticleDetailService(c *gin.Context, articleID string) (ArticleDetailResponse, string, error) {
+func ArticleDetailService(c *gin.Context, articleID string) (resp.ArticleDetailResponse, string, error) {
 	redisService.NewArticleLook().Set(articleID)
 
 	article, err := article_repo.GetArticleByID(articleID)
 	if err != nil {
-		return ArticleDetailResponse{}, "请输入正确文章id", err
+		return resp.ArticleDetailResponse{}, "请输入正确文章id", err
 	}
 
 	isCollect := isUserArticleColl(c, article.ID)
 
-	var articleDetail = ArticleDetailResponse{
+	var articleDetail = resp.ArticleDetailResponse{
 		ArticleModel: article,
 		IsCollect:    isCollect,
 	}
@@ -47,7 +37,7 @@ func ArticleDetailService(c *gin.Context, articleID string) (ArticleDetailRespon
 		Category: article.Category,
 	})
 	if err != nil {
-		return ArticleDetailResponse{}, "查找错误", err
+		return resp.ArticleDetailResponse{}, "查找错误", err
 	}
 	var currentIndex = -1
 	// 查找当前记录的索引
@@ -63,7 +53,7 @@ func ArticleDetailService(c *gin.Context, articleID string) (ArticleDetailRespon
 
 	if currentIndex > 0 {
 		previousArticle = list[currentIndex-1]
-		articleDetail.Next = &ArticleItem{
+		articleDetail.Next = &resp.ArticleItem{
 			ID:    previousArticle.ID,
 			Title: previousArticle.Title,
 		}
@@ -72,7 +62,7 @@ func ArticleDetailService(c *gin.Context, articleID string) (ArticleDetailRespon
 	// 查找下一个记录
 	if currentIndex < len(list)-1 {
 		nextArticle = list[currentIndex+1]
-		articleDetail.Prev = &ArticleItem{
+		articleDetail.Prev = &resp.ArticleItem{
 			ID:    nextArticle.ID,
 			Title: nextArticle.Title,
 		}

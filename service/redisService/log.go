@@ -11,10 +11,9 @@ import (
 )
 
 const (
-	logQueueKey         = "logstash:queue" // 日志队列KEY
-	maxBatchSize        = 100              // 最大批量处理条数
-	expireDuration      = 24 * time.Hour   // Redis数据过期时间
-	bufferFlushInterval = 5 * time.Minute  // 批量处理间隔
+	logQueueKey    = "logstash:queue" // 日志队列KEY
+	maxBatchSize   = 100              // 最大批量处理条数
+	expireDuration = 24 * time.Hour   // Redis数据过期时间
 )
 
 type RedisStore struct {

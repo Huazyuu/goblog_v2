@@ -2,6 +2,7 @@ package images_api
 
 import (
 	"backend/controller/res"
+	"backend/controller/resp"
 	"backend/global"
 	"backend/middleware/jwt"
 	"backend/plugins/logStash"
@@ -59,13 +60,13 @@ func handleUpload(c *gin.Context, handler func(*gin.Context, *jwt.CustomClaims) 
 
 	// 统一响应处理
 	switch v := result.(type) {
-	case fileService.FileUploadResponse:
+	case resp.FileUploadResponse:
 		if v.IsSuccess {
 			res.OkWithData(v, c)
 		} else {
 			res.FailWithMessage(v.Msg, c)
 		}
-	case []fileService.FileUploadResponse:
+	case []resp.FileUploadResponse:
 		res.OkWithData(v, c)
 	case error:
 		res.FailWithMessage(v.Error(), c)
@@ -107,7 +108,7 @@ func multipleFilesUpload(c *gin.Context, claims *jwt.CustomClaims) interface{} {
 		return err
 	}
 
-	var results []fileService.FileUploadResponse
+	var results []resp.FileUploadResponse
 	for _, file := range files {
 		result := fileService.FilesUpload(c, file, claims.NickName)
 		results = append(results, result)

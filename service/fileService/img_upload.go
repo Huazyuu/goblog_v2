@@ -1,6 +1,7 @@
 package fileService
 
 import (
+	"backend/controller/resp"
 	"backend/global"
 	"backend/models/diverseType"
 	"backend/models/sqlmodels"
@@ -18,17 +19,17 @@ import (
 )
 
 // FileUpload 单文件上传
-func FileUpload(c *gin.Context, file *multipart.FileHeader, nickname string) FileUploadResponse {
+func FileUpload(c *gin.Context, file *multipart.FileHeader, nickname string) resp.FileUploadResponse {
 	return handleUpload(c, file, nickname, diverseType.Local, localUploadHandler)
 }
 
 // FilesUpload 多文件上传
-func FilesUpload(c *gin.Context, file *multipart.FileHeader, nickname string) FileUploadResponse {
+func FilesUpload(c *gin.Context, file *multipart.FileHeader, nickname string) resp.FileUploadResponse {
 	return handleUpload(c, file, nickname, diverseType.Local, localUploadHandler)
 }
 
 // FreeimgUpload 免费图床上传
-func FreeimgUpload(c *gin.Context, file *multipart.FileHeader, nickname string) FileUploadResponse {
+func FreeimgUpload(c *gin.Context, file *multipart.FileHeader, nickname string) resp.FileUploadResponse {
 	res := handleUpload(c, file, nickname, diverseType.Remote, localUploadHandler)
 	if !res.IsSuccess {
 		return res
@@ -62,7 +63,7 @@ func localUploadHandler(file *multipart.FileHeader, path string, c *gin.Context)
 // 	return c.SaveUploadedFile(file, path)
 // }
 
-func handleUpload(c *gin.Context, file *multipart.FileHeader, nickname string, imgType diverseType.ImageType, handler uploadHandler) FileUploadResponse {
+func handleUpload(c *gin.Context, file *multipart.FileHeader, nickname string, imgType diverseType.ImageType, handler uploadHandler) resp.FileUploadResponse {
 
 	// 文件验证
 	if msg, err := validateFile(file); err != nil {
@@ -173,16 +174,16 @@ func updateFileRecord(oldPath, newPath string, imgType diverseType.ImageType) er
 	})
 }
 
-func errorResponse(msg, fileName string) FileUploadResponse {
-	return FileUploadResponse{
+func errorResponse(msg, fileName string) resp.FileUploadResponse {
+	return resp.FileUploadResponse{
 		Msg:       msg,
 		FileName:  fileName,
 		IsSuccess: false,
 	}
 }
 
-func successResponse(fileName, msg string) FileUploadResponse {
-	return FileUploadResponse{
+func successResponse(fileName, msg string) resp.FileUploadResponse {
+	return resp.FileUploadResponse{
 		Msg:       msg,
 		FileName:  fileName,
 		IsSuccess: true,

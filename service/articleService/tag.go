@@ -1,18 +1,12 @@
 package articleService
 
 import (
+	"backend/controller/resp"
 	"backend/repository/article_repo"
 	"backend/repository/tag_repo"
 )
 
-type TagResponse struct {
-	Tag           string   `json:"tag"`
-	Count         int64    `json:"count"`
-	ArticleIDList []string `json:"articleIDList"`
-	CreatedAt     string   `json:"createdAt"`
-}
-
-func GetArticleTags(page, limit int) ([]TagResponse, int64, error) {
+func GetArticleTags(page, limit int) ([]resp.ArticleTagResponse, int64, error) {
 	// 获取ES聚合数据
 	aggregations, total, err := article_repo.GetTagAggregations(page, limit)
 	if err != nil {
@@ -29,9 +23,9 @@ func GetArticleTags(page, limit int) ([]TagResponse, int64, error) {
 		return nil, 0, err
 	}
 	// 组装响应数据
-	var response []TagResponse
+	var response []resp.ArticleTagResponse
 	for _, agg := range aggregations {
-		response = append(response, TagResponse{
+		response = append(response, resp.ArticleTagResponse{
 			Tag:           agg.Tag,
 			Count:         agg.DocCount,
 			ArticleIDList: agg.ArticleIDList,

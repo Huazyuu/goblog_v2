@@ -2,18 +2,14 @@ package usersService
 
 import (
 	"backend/controller/req"
+	"backend/controller/resp"
 	"backend/middleware/jwt"
 	"backend/models/diverseType"
 	"backend/models/sqlmodels"
 	"strings"
 )
 
-type UserResponse struct {
-	sqlmodels.UserModel
-	RoleID int `json:"role_id"`
-}
-
-func UsersList(claims *jwt.CustomClaims, page req.UserListRequest) ([]UserResponse, int64, error) {
+func UsersList(claims *jwt.CustomClaims, page req.UserListRequest) ([]resp.UserResponse, int64, error) {
 	list, count, err := req.ComList(sqlmodels.UserModel{Role: diverseType.Role(page.Role)}, req.Option{
 		PageInfo: page.PageInfo,
 		Likes:    []string{"nick_name", "user_name"},
@@ -21,7 +17,7 @@ func UsersList(claims *jwt.CustomClaims, page req.UserListRequest) ([]UserRespon
 	if err != nil {
 		return nil, 0, err
 	}
-	var users []UserResponse
+	var users []resp.UserResponse
 	for _, user := range list {
 		if diverseType.Role(claims.Role) != diverseType.PermissionAdmin {
 			// 管理员
@@ -30,7 +26,7 @@ func UsersList(claims *jwt.CustomClaims, page req.UserListRequest) ([]UserRespon
 		user.Tel = desensitizationTel(user.Tel)
 		user.Email = desensitizationEmail(user.Email)
 		// 脱敏
-		users = append(users, UserResponse{
+		users = append(users, resp.UserResponse{
 			UserModel: user,
 			RoleID:    int(user.Role),
 		})

@@ -2,19 +2,14 @@ package commentService
 
 import (
 	"backend/controller/req"
+	"backend/controller/resp"
 	"backend/models/sqlmodels"
 	"backend/repository/article_repo"
 	"backend/repository/comment_repo"
 	"github.com/liu-cn/json-filter/filter"
 )
 
-type CommentByArticleListResponse struct {
-	Title string `json:"title"`
-	ID    string `json:"id"`
-	Count int    `json:"count"`
-}
-
-func CommentByArticleListService(cr req.PageInfo) ([]CommentByArticleListResponse, error) {
+func CommentByArticleListService(cr req.PageInfo) ([]resp.CommentByArticleListResponse, error) {
 	articleIDlist, err := comment_repo.GetArticleIdCount(cr.Page, cr.Limit)
 	if err != nil {
 		return nil, err
@@ -29,9 +24,9 @@ func CommentByArticleListService(cr req.PageInfo) ([]CommentByArticleListRespons
 	if err != nil {
 		return nil, err
 	}
-	list := make([]CommentByArticleListResponse, 0, len(articles))
+	list := make([]resp.CommentByArticleListResponse, 0, len(articles))
 	for _, article := range articles {
-		list = append(list, CommentByArticleListResponse{
+		list = append(list, resp.CommentByArticleListResponse{
 			Title: article.Title,
 			ID:    article.ID,
 			Count: articleIDMap[article.ID],

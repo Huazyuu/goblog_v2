@@ -2,16 +2,11 @@ package dataService
 
 import (
 	"backend/controller/req"
+	"backend/controller/resp"
 	"backend/models/sqlmodels"
 	"backend/repository/data_repo"
 	"time"
 )
-
-type DateCountResponse struct {
-	DateList  []string `json:"date_list"`
-	LoginData []int    `json:"login_data"`
-	SignData  []int    `json:"sign_data"`
-}
 
 var dateDurationMap = map[req.DateType]time.Duration{
 	req.OneWeek:    7 * 24 * time.Hour,
@@ -22,7 +17,7 @@ var dateDurationMap = map[req.DateType]time.Duration{
 	req.OneYear:    365 * 24 * time.Hour,
 }
 
-func LoginDataService(cr req.DateRequest) (res DateCountResponse, err error) {
+func LoginDataService(cr req.DateRequest) (res resp.DateCountResponse, err error) {
 	// 获取时间范围
 	endTime := time.Now()
 	var startTime time.Time

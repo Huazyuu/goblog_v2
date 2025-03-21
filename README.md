@@ -2,7 +2,7 @@
 
 ## uml图
 
-<img src="./sql/uml.png" alt="uml"/>
+<img src="./doc/sql/uml.png" alt="uml"/>
 
 ## 项目结构
 

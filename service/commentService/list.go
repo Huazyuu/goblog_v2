@@ -2,31 +2,19 @@ package commentService
 
 import (
 	"backend/controller/req"
+	"backend/controller/resp"
 	"backend/models/esmodels"
 	"backend/models/sqlmodels"
 	"backend/repository/article_repo"
-	"time"
 )
 
-type CommentListResponse struct {
-	ID              uint      `json:"id"`
-	CreatedAt       time.Time `json:"created_at"` // 创建时间
-	ArticleTitle    string    `json:"article_title"`
-	ArticleBanner   string    `json:"article_banner"`
-	ParentCommentID *uint     `json:"parent_comment_id"`
-	Content         string    `json:"content"`
-	DiggCount       int       `json:"digg_count"`
-	CommentCount    int       `json:"comment_count"`
-	UserNickName    string    `json:"user_nick_name"`
-}
-
-func CommentListService(cr req.PageInfo) ([]CommentListResponse, error) {
+func CommentListService(cr req.PageInfo) ([]resp.CommentListResponse, error) {
 	list, _, err := req.ComList(sqlmodels.CommentModel{}, req.Option{
 		PageInfo: cr,
 		Preload:  []string{"User"},
 	})
 
-	commentList := make([]CommentListResponse, 0, len(list))
+	commentList := make([]resp.CommentListResponse, 0, len(list))
 	articleIDList := make([]any, 0, len(list))
 	articleMap := make(map[string]esmodels.ArticleModel)
 
@@ -44,7 +32,7 @@ func CommentListService(cr req.PageInfo) ([]CommentListResponse, error) {
 	}
 
 	for _, model := range list {
-		commentList = append(commentList, CommentListResponse{
+		commentList = append(commentList, resp.CommentListResponse{
 			ID:              model.ID,
 			CreatedAt:       model.CreatedAt,
 			ParentCommentID: model.ParentCommentID,

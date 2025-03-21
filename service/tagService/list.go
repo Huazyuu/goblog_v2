@@ -2,6 +2,7 @@ package tagService
 
 import (
 	"backend/controller/req"
+	"backend/controller/resp"
 	"backend/global"
 	"backend/models/esmodels"
 	"backend/models/sqlmodels"
@@ -22,12 +23,7 @@ func TagList(cr req.PageInfo) ([]sqlmodels.TagModel, int64, error) {
 	return list, cnt, nil
 }
 
-type TagResponse struct {
-	TagName string `json:"tag_name"`
-	Count   string `json:"count"`
-}
-
-func TagNameListService() ([]TagResponse, error) {
+func TagNameListService() ([]resp.TagResponse, error) {
 	type T struct {
 		DocCountErrorUpperBound int `json:"doc_count_error_upper_bound"`
 		SumOtherDocCount        int `json:"sum_other_doc_count"`
@@ -52,9 +48,9 @@ func TagNameListService() ([]TagResponse, error) {
 	var tagType T
 	json.Unmarshal(byteData, &tagType)
 
-	var tagList = make([]TagResponse, 0)
+	var tagList = make([]resp.TagResponse, 0)
 	for _, bucket := range tagType.Buckets {
-		tagList = append(tagList, TagResponse{
+		tagList = append(tagList, resp.TagResponse{
 			TagName: bucket.Key,
 			Count:   strconv.Itoa(bucket.DocCount),
 		})
