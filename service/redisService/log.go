@@ -64,7 +64,6 @@ func (rs *RedisStore) Flush() error {
 func (rs *RedisStore) GetLogs(batchSize int64) ([]*sqlmodels.LogModel, error) {
 	r := rs.client.LRange(logQueueKey, 0, batchSize-1)
 	result, err := r.Result()
-	global.Log.Info("result:", result)
 	if err != nil {
 		return nil, err
 	}

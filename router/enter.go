@@ -40,5 +40,7 @@ func InitRouter() *gin.Engine {
 	r.NewsRouter()
 	r.ChatRouter()
 	r.LogRouter()
+	r.DataRouter()
+	r.GaodeRouter()
 	return router
 }

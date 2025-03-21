@@ -23,6 +23,6 @@ type UserModel struct {
 	Link       string                 `gorm:"size:128;comment:我的链接地址" json:"link,select(info)"`                      // 我的链接地址
 }
 
-func (*UserModel) TableName() string {
+func (UserModel) TableName() string {
 	return "user"
 }

@@ -7,8 +7,8 @@ import (
 	"net"
 )
 
-// isPrivateIPAddr 是否内网地址
-func isPrivateIPAddr(ip net.IP) bool {
+// IsPrivateIPAddr 是否内网地址
+func IsPrivateIPAddr(ip net.IP) bool {
 	if ip.IsLoopback() {
 		return true
 	}
@@ -28,7 +28,7 @@ func isPrivateIPAddr(ip net.IP) bool {
 }
 func GetAddr(ip string) string {
 	parseIP := net.ParseIP(ip)
-	if isPrivateIPAddr(parseIP) {
+	if IsPrivateIPAddr(parseIP) {
 		return "内网地址"
 	}
 	record, err := global.AddrDB.City(net.ParseIP(ip))
@@ -46,4 +46,21 @@ func GetAddrByGin(c *gin.Context) (ip, addr string) {
 	ip = c.ClientIP()
 	addr = GetAddr(ip)
 	return ip, addr
+}
+
+// IsPublicIPAddr 是否公网地址
+func IsPublicIPAddr(ip string) bool {
+	IP := net.ParseIP(ip)
+	if IP == nil {
+		return false
+	}
+
+	ip4 := IP.To4()
+	if ip4 == nil {
+		return false
+	}
+	if !IP.IsPrivate() && !IP.IsLoopback() {
+		return true
+	}
+	return false
 }

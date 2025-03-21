@@ -7,7 +7,6 @@ import (
 
 func SyncLogs() {
 	log := redisService.NewRedisStore(global.Redis, global.DB)
-	global.Log.Info("sync logs.....")
 	processLogs(log)
 }
 

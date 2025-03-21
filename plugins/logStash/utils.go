@@ -2,6 +2,7 @@ package logStash
 
 import (
 	"backend/global"
+	"backend/utils"
 	"fmt"
 	"math"
 	"net"
@@ -26,25 +27,8 @@ func formatBytes(size int64) string {
 	return fmt.Sprintf("%.2f %s", roundedSize, units[unitIndex])
 }
 
-// isPublicIPAddr 是否公网地址
-func isPublicIPAddr(ip string) bool {
-	IP := net.ParseIP(ip)
-	if IP == nil {
-		return false
-	}
-
-	ip4 := IP.To4()
-	if ip4 == nil {
-		return false
-	}
-	if !IP.IsPrivate() && !IP.IsLoopback() {
-		return true
-	}
-	return false
-}
-
 func getAddr(ip string) (addr string) {
-	if !isPublicIPAddr(ip) {
+	if !utils.IsPublicIPAddr(ip) {
 		return "内网地址"
 	}
 	cities, err := global.AddrDB.City(net.ParseIP(ip))
