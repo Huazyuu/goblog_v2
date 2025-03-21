@@ -1,0 +1,21 @@
+# 忽略版本控制和 IDE 文件
+.git/
+.idea/
+*.md
+
+# 忽略本地开发配置和日志
+*.log
+tmp/
+
+
+# 忽略已挂载的目录（通过 volumes 管理）
+uploads/avatar
+uploads/chat_avatar
+uploads/file
+doc/  
+
+# 忽略测试文件和二进制
+test/
+*.test
+
+settings_copy.yaml

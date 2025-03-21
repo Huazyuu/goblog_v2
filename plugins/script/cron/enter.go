@@ -7,9 +7,9 @@ import (
 )
 
 func CronInit() {
-	timezone, _ := time.LoadLocation("Asia/Shanghai")
-	Cron := cron.New(cron.WithSeconds(), cron.WithLocation(timezone))
-	_, err := Cron.AddFunc("0 0 3 * * *", SyncArticleData)
+	location, err := time.LoadLocation("Asia/Shanghai")
+	Cron := cron.New(cron.WithSeconds(), cron.WithLocation(location))
+	_, err = Cron.AddFunc("0 0 3 * * *", SyncArticleData)
 	if err != nil {
 		global.Log.Error(err)
 	}

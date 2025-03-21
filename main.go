@@ -19,13 +19,12 @@ import (
 func main() {
 	// 初始化核心配置
 	core.InitCore()
-	// 定时任务
-	cron.CronInit()
-	// 解析命令行参数
 	option := flags.Parse()
 	if option.Run() {
 		return
 	}
+	// 定时任务
+	cron.CronInit()
 
 	r := router.InitRouter()
 	addr := global.Config.System.Addr()

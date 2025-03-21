@@ -42,3 +42,6 @@ bulid/
 # dump
 dump/sql/
 dump/es/
+
+# docker data
+data

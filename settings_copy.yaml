@@ -1,3 +1,4 @@
+# docker 部署
 site_info:
   created_at:  # 网站创建时间
   bei_an:  # 网站备案号
@@ -22,22 +23,22 @@ system:
   env: debug  # 系统运行环境，这里是调试模式 debug release test
 
 mysql:
-  host: 127.0.0.1  # MySQL数据库的主机地址
-  port: 3306  # MySQL数据库的端口号
+  host: mysql  # MySQL数据库的主机地址
+  port: 3307  # MySQL数据库的端口号 防止docker mysql占用本地mysql端口
   config: charset=utf8mb4&parseTime=True&loc=Local  # MySQL连接配置参数，设置字符集、是否解析时间、时区等
   db: yu_blog  # 要连接的数据库名称
   user: root  # 连接数据库的用户名
   password: 123456  # 连接数据库的密码
-  log_level: dev  # MySQL操作日志的级别，这里是开发级别 dev release
+  log_level: debug  # MySQL操作日志的级别，这里是开发级别 debug release test
 
 redis:
-  ip: 127.0.0.1  # Redis服务器的IP地址
+  ip: redis  # Redis服务器的IP地址
   port: 6379  # Redis服务器的端口号
   password: ""  # Redis服务器的密码，这里为空
   pool_size: 100  # Redis连接池的大小
 
 es:
-  host: http://127.0.0.1  # Elasticsearch服务器的主机地址
+  host: http://elasticsearch  # Elasticsearch服务器的主机地址
   port: 9200  # Elasticsearch服务器的端口号
   user: ""  # Elasticsearch的用户名，这里为空
   password: ""  # Elasticsearch的密码，这里为空

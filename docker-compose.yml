@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  goblog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: goblog-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./uploads:/app/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      MYSQL_DSN: "root:123456@tcp(mysql:3306)/yu_blog?charset=utf8mb4&parseTime=True"
+      REDIS_ADDR: "redis:6379"
+      ES_HOST: "http://elasticsearch:9200"
+    networks:
+      - goblog_net
+
+  mysql:
+    image: mysql:5.7.26
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
+    container_name: goblog-mysql
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./backend/docker_init/mysql-init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: yu_blog
+      TZ: Asia/Shanghai
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    restart: always
+    networks:
+      - goblog_net
+
+  redis:
+    image: redis:3.0-alpine
+    container_name: goblog-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    environment:
+      TZ: Asia/Shanghai
+    restart: always
+    networks:
+      - goblog_net
+
+  elasticsearch:
+    image: elasticsearch:7.12.0
+    container_name: goblog-elasticsearch
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - http.host=0.0.0.0
+      - transport.host=0.0.0.0
+      - TZ=Asia/Shanghai
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    restart: always
+    networks:
+      - goblog_net
+
+networks:
+  goblog_net:
+    driver: bridge
